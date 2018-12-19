@@ -12,15 +12,14 @@ public class Main {
             System.out.println(menu);
             response = input.nextInt();
             if (response == 1) {
-                quadratic(); //Runs the specified program
+                additup(); //Runs the specified program
             } else if (response == 2) {
-                pythagorean();
+                additup();
             } else if (response == 3){
-
+                additup();
             } else if (response == 4) {
-
+                additup();
             } else {
-
             }
 
         } while (response != 0);
@@ -33,5 +32,14 @@ public class Main {
             result += i + ":  " + items[i] + "\n";
         }
         return result;
+    }
+    public static void additup() {
+        System.out.println("Enter an integer");
+        int lastnum = input.nextInt();
+        int result = 0;
+        for(int i=0;i<lastnum+1;i++) {
+            result += i;
+        }
+        System.out.println("Your result is " + result);
     }
 }
