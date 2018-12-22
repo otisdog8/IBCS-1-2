@@ -1,14 +1,16 @@
 package com.company;
 
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 public class Main {
     static Scanner input = new Scanner(System.in); //Makes it so that everyone can use this Scanner
+    static Random rand = new Random(); //Makes it so everyone can use this Random
     public static void main(String[] args) throws IOException {
         int response;
-        String[] items = {"End Program", "Character code", "From start to end", "Next int", "Two numbers"}; //Menu code
+        String[] items = {"End Program", "Character code", "From start to end", "Next int", "Two numbers","Numbergame","Horizontal tabs","Rectangle drawer","Factorial table","The 1000th prime"}; //Menu code
         String menu = makemenu(items);
         do {
             System.out.println(menu);
@@ -21,7 +23,18 @@ public class Main {
                 nextint();
             } else if (response == 4) {
                 twonums();
+            } else if (response == 5) {
+                numbergame();
+            } else if (response == 6) {
+                horizontaltabs();
+            } else if (response == 7) {
+                rectangle();
+            } else if (response == 8) {
+                factorials();
+            } else if (response == 9) {
+                thousandprimes();
             } else {
+
             }
 
         } while (response != 0);
@@ -39,7 +52,7 @@ public class Main {
     private static int getchar() throws IOException{
         return System.in.read(); //Little hack that makes it a tiny bit easier for me
     }
-    public static void charcode() throws IOException {
+    private static void charcode() throws IOException {
         int[] history = new int[]{1,1,1};
         System.out.println("Type 0 in three times in a row to exit");
         int charval;
@@ -52,7 +65,7 @@ public class Main {
             System.out.println("Your letter's value was " + history[2] + ". The character was " + (char) history[2] +".");
         } while (history[0] != 48 || history[1] != 48 || history[2] != 48);
     }
-    public static void startend() throws IOException {
+    private static void startend() throws IOException {
         System.out.println("Enter 0 6 times in a row to exit");
         int[] history = new int[]{1,1,1,1,1,1};
         do {
@@ -74,7 +87,7 @@ public class Main {
 
         } while (history[0] != 48 || history[1] != 48 || history[2] != 48 || history[3] != 48 || history[4] != 48 || history[5] != 48); //For some reason history != new int[]{48,48,48,48,48,48} didn't work, so you get this abomination
     }
-    public static int getuptosixnums() throws IOException{
+    private static int getuptosixnums() throws IOException{
         int character;
         String num = "";
         do {
@@ -86,12 +99,12 @@ public class Main {
         character = Integer.parseInt(num); //I just reused this veriable cause I don't need it
         return character;
     }
-    public static void nextint() throws IOException{
+    private static void nextint() throws IOException{
         System.out.println("Enter a number followed by a space");
         System.out.println("Your number was " + getuptosixnums());
     }
-    public static void twonums() throws IOException {
-        System.out.println("Enter your first number");
+    private static void twonums() throws IOException {
+        System.out.println("Enter two numbers, seperated by a space");
         int first;
         int second;
         String num = ""; //Basically a copy of the getuptosixnums code (that can get more than six nums) that is adapted to my this project
@@ -101,7 +114,7 @@ public class Main {
         } while (first != 32);
         num = num.substring(0, num.length()-1);
         first = Integer.parseInt(num);
-        String numtwo = "";
+
         do {
             second = getchar();
             num += (char) second;
@@ -110,6 +123,107 @@ public class Main {
         second = Integer.parseInt(num);
         int sum = first + second;
         System.out.println("The sum is " + sum);
+    }
+    private static void numbergame() {
+        int solved = 0;
+        int guess;
+        int numscorrect;
+        int guesses = 0;
+        int random = rand.nextInt(1001); //Sets it so that it can generate a value of 1000
+        do {
+            numscorrect = 0;
+            System.out.println("Enter your a whole number between 1 and 1000");
+            guess = input.nextInt();
+            guesses++; //Increments guesses
+            if (guess % 10 == random % 10) { //Calculates how many digits are correct
+                numscorrect++;
+            }
+            if (guess % 100 - guess % 10 == random % 100 - random % 10) {
+                numscorrect++;
+            }
+            if (guess % 1000 - guess % 100 == random % 1000 - random % 100) {
+                numscorrect++;
+            } //The only reason the 1000s number will ever be the same as the answer is when the answer, or when the person for whatever reason decides to break the rules
+            if (random == guess) {
+                solved++;
+                System.out.println("Congratulations you did it in " + guesses + " guesses.");
+            } else {
+                System.out.println("You got " + numscorrect + " digits correct.");
+            }
+        } while (solved == 0);
+    }
+    private static void horizontaltabs() {
+        System.out.println("Enter the number of lines to print");
+        int linenum = input.nextInt();
+        for(int i = 0; i < linenum + 1; i++) {
+            for(int j = 0; j < i; j++) {
+                System.out.print(linenum - i + 1);
+                System.out.print((char) 9);
+            }
+            System.out.println();
+        }
+    }
+    private static void rectangle() {
+        System.out.println("Enter the height of the rectangle");
+        int height = input.nextInt();
+        System.out.println("Enter the width of the rectangle");
+        int width = input.nextInt();
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (j == 0 || j == width-1 || i == 0 || i == height-1) { //Tells it to print an asterix when it is needed
+                    System.out.print('*');
+                } else {
+                    System.out.print(' ');
+                }
+            }
+            System.out.println();
+        }
+    }
+    private static void factorials() {
+        System.out.println("Enter the size of your factorial table"); //We're using longs here to stave off the inevitable variable overflow
+        long size = input.nextLong();
+        long result;
+        for (long i = 0; i < size; i++) {
+            result = i + 1;
+            System.out.print((i+1) + "!= " + (i + 1));
+            for (long j = i; j > 0; j--) {
+                System.out.print(" x " + j);
+                result *= j;
+            }
+            System.out.println(" = " + result);
+        }
+    }
+    private static ArrayList<Integer> primefinder(ArrayList<Integer> primes) { //This was stolen from my lab 4
+        int found = 0;
+        int start = (int) primes.get(primes.size() - 1);
+        while (found == 0) {
+            start += 2;
+            for (int prime : primes) {
+                if (start % prime != 0) { //Tests for primality
+                    found = start;
+                } else {
+                    found = 0;
+                    break;
+                }
+            }
+            if (found != 0) {
+                primes.add(found);
+            }
+        }
+        return primes;
+    }
+    private static void thousandprimes() {
+        System.out.println("Enter how many primes you want to find");
+        int numofprimes = input.nextInt() - 2; //This is to account for the offset of already generated primes
+        ArrayList<Integer> primes = new ArrayList<>();
+        primes.add(2);
+        primes.add(3);
+        int found = 0;
+        while (found < numofprimes) {
+            found++;
+            primes = primefinder(primes);
+        }
+        System.out.println("Prime number " + (numofprimes + 2) + " is " + primes.get(primes.size()-1));
     }
 
 }

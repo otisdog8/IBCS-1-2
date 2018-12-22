@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bf7e849b-3f32-4357-96f0-4d89eeffcf51" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/company/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../5/lab5/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../5/lab5/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../5/lab5/out/production/lab5/com/company/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/../../5/lab5/out/production/lab5/com/company/Main.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../5/lab5/src/com/company/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../5/lab5/src/com/company/Main.java" afterDir="false" />
@@ -20,8 +20,8 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/company/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="5" selection-start-line="5" selection-end-line="5" />
+            <state relative-caret-position="833">
+              <caret line="193" column="150" selection-start-line="193" selection-start-column="150" selection-end-line="193" selection-end-column="150" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -52,8 +52,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="33" />
-    <option name="y" value="-8" />
+    <option name="x" value="580" />
+    <option name="y" value="200" />
     <option name="width" value="1400" />
     <option name="height" value="1000" />
   </component>
@@ -231,8 +231,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/company/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" selection-start-line="5" selection-end-line="5" />
+        <state relative-caret-position="833">
+          <caret line="193" column="150" selection-start-line="193" selection-start-column="150" selection-end-line="193" selection-end-column="150" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

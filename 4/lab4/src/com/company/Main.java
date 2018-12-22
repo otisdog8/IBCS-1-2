@@ -191,19 +191,19 @@ public class Main {
 
     }
 
-    private static ArrayList<Integer> primefinder(ArrayList<Integer> primes) { //This function is needed so that we can correctly reduce the rocepricals
+    private static ArrayList<Integer> primefinder(ArrayList<Integer> primes) { //This function is needed so we can correctly calculate the reciprocals
         int found = 0;
-        int start = (int) primes.get(primes.size()-1);
-        int result;
+        int start = (int) primes.get(primes.size() - 1);
         while (found == 0) {
             start += 2;
+            System.out.println(primes);
             for (int prime : primes) {
-                if (start % prime == 0) {
-                    found = 0;
-                } else {
+                if (start % prime != 0) { //Tests for primality
                     found = start;
+                } else {
+                    found = 0;
+                    break;
                 }
-
             }
             if (found != 0) {
                 primes.add(found);
@@ -211,6 +211,7 @@ public class Main {
         }
         return primes;
     }
+
     private static ArrayList<Integer> getprimefactors(ArrayList<Integer> primes,int tested) {
         ArrayList<Integer> result = new ArrayList<>(primes);
         for (int i = 0; i < result.size(); i++)  {
