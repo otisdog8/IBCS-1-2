@@ -5,16 +5,16 @@ class gasuse {
   public static void main(String args[]) {
     Scanner in = new Scanner(System.in);
     System.out.println("Enter your start odometer: ");
-    int odometer1 = in.nextInt();
+    float odometer1 = in.nextFloat();
     System.out.println("Enter your end odometer: ");
-    int odometer2 = in.nextInt();
+    float odometer2 = in.nextFloat();
     System.out.println("Enter your start fuel: ");
-    int fuel1 = in.nextInt();
+    float fuel1 = in.nextFloat();
     System.out.println("Enter your end fuel: ");
-    int fuel2 = in.nextInt();
+    float fuel2 = in.nextFloat();
     odometer2 -= odometer1;
     fuel1 -= fuel2;
-    double mpg = odometer2 / fuel2;
+    float mpg = (float) odometer2 / (float) fuel1;
     System.out.println("Miles per gallon is: " + mpg);
   }
 }

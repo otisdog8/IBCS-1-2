@@ -4,7 +4,7 @@ class circumference {
     Scanner in = new Scanner(System.in);
     System.out.println("Enter the radius:  ");
     double radius = in.nextFloat();
-    radius = radius * 3.14159;
+    radius = 2 * radius * 3.14159;
     System.out.println("The circumference is:  " + radius);
   }
 }

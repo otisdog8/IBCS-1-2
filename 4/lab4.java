@@ -1,7 +1,6 @@
-package com.company;
 import java.util.Scanner;
 import java.util.ArrayList;
-public class Main {
+public class lab4 {
     static Scanner input = new Scanner(System.in); //Makes it so that everyone can use this Scanner
 
     public static void main(String[] args) {
