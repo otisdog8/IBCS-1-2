@@ -3,18 +3,21 @@ import java.lang.Math;
 
 class gasuse {
   public static void main(String args[]) {
+    //Gets odometer and fuel data
     Scanner in = new Scanner(System.in);
     System.out.println("Enter your start odometer: ");
-    float odometer1 = in.nextFloat();
+    double distancestart = in.nextFloat();
     System.out.println("Enter your end odometer: ");
-    float odometer2 = in.nextFloat();
+    double distancefinish = in.nextFloat();
     System.out.println("Enter your start fuel: ");
-    float fuel1 = in.nextFloat();
+    double fuelstart = in.nextFloat();
     System.out.println("Enter your end fuel: ");
-    float fuel2 = in.nextFloat();
-    odometer2 -= odometer1;
-    fuel1 -= fuel2;
-    float mpg = (float) odometer2 / (float) fuel1;
+    double fuelfinish = in.nextFloat();
+    //Calculates the miles per gallon
+    double distancetraveled = distancefinish - distancestart;
+    double fuelused = fuelstart - fuelfinish;
+    double mpg = distancetraveled / fuelused;
+    //Displays the result
     System.out.println("Miles per gallon is: " + mpg);
   }
 }
