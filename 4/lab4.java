@@ -91,7 +91,9 @@ public class lab4 {
     } while (grade != -1);
     }
     private static void reciprocal() {
-        int
+        int num;
+        int top;
+        int bottom;
         do {
             times++;
             System.out.println("Enter a number (0 to stop)");
@@ -128,43 +130,4 @@ public class lab4 {
 
       return firstnum;
     }
-
-
-    private static ArrayList<Integer> primefinder(ArrayList<Integer> primes) { //This function is needed so we can correctly calculate the reciprocals
-        int found = 0;
-        int start = (int) primes.get(primes.size() - 1);
-        while (found == 0) {
-            start += 2;
-            System.out.println(primes);
-            for (int prime : primes) {
-                if (start % prime != 0) { //Tests for primality
-                    found = start;
-                } else {
-                    found = 0;
-                    break;
-                }
-            }
-            if (found != 0) {
-                primes.add(found);
-            }
-        }
-        return primes;
-    }
-
-    private static ArrayList<Integer> getprimefactors(ArrayList<Integer> primes,int tested) {
-        ArrayList<Integer> result = new ArrayList<>(primes);
-        for (int i = 0; i < result.size(); i++)  {
-            result.set(i,0);
-        }
-        for(int i = 0; i < primes.size(); i++) {
-            if (tested % primes.get(i) == 0) {
-                result.set(i,result.get(i)+1);
-                tested /= primes.get(i);
-                i--;
-            }
-        }
-        return result;
-    }
-
-
 }
