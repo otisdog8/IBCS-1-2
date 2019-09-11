@@ -7,6 +7,7 @@ import java.util.ArrayList;
 //********************************
 
 public class lab4 {
+
     static Scanner input = new Scanner(System.in); //Makes it so that everyone can use this Scanner
 
     public static void main(String[] args) {
@@ -90,21 +91,34 @@ public class lab4 {
         }
     } while (grade != -1);
     }
+
     private static void reciprocal() {
         int num;
-        int top;
-        int bottom;
+        int top = 0;
+        int bottom = 0;
+        int times = 0;
+        int commonfactor;
         do {
             times++;
             System.out.println("Enter a number (0 to stop)");
             num = input.nextInt();
-
-            System.out.println("Your sum is: " + top + " / " + bottom);
+            if (top == 0 && bottom == 0) {
+              top = 1;
+              bottom = num;
+              continue;
             }
             if (num == 0) {
                 System.out.println("Do you want to quit? 0 to quit");
                 num = input.nextInt();
+                times--;
+                continue;
             }
+            commonfactor = gcd((bottom + top * num), num * bottom);
+            top = bottom + top * num;
+            bottom = num * bottom;
+            top /= commonfactor;
+            bottom /= commonfactor;
+            System.out.println("Your sum is: " + top + " / " + bottom);
         } while (num != 0 && times != 10); //The limit of 10 is 100% artificial; this program can do it until the integers overflow
     }
 

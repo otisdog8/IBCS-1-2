@@ -1,13 +1,18 @@
 import java.util.Scanner;
 
+//********************************
+//*     Made By Jacob Root       *
+//*                              *
+//********************************
+
 public class bmi {
 
   public static void main(String[] args) {
     //Get data
     Scanner input = new Scanner(System.in);
-    System.out.println("Enter your weight in pounds");
+    System.out.print("Enter your weight in pounds:  ");
     double weight = input.nextDouble();
-    System.out.println("Enter your height in inches");
+    System.out.print("Enter your height in inches:  ");
     double height = input.nextDouble();
     //Calculate BMI and round
     double BMI = weight * 703 / Math.pow(height, 2);
