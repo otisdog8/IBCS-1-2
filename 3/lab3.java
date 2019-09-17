@@ -29,16 +29,16 @@ public class lab3 {
 
       System.out.println("Bye!");
   }
-  
+
   public static String makemenu(String[] items) { //Function generates a menu string so that I don't have to type it out.
-      String result = "";
-      int length = items.length; //*very* slight optimization
+    String result = "";
+    int length = items.length; //*very* slight optimization
 
-      for(int i = 0;i < length; i++) { //Iterates through the array items and generates a menu entry for each item on items
-          result += i + ":  " + items[i] + "\n";
-      }
+    for(int i = 0;i < length; i++) { //Iterates through the array items and generates a menu entry for each item on items
+      result += i + ":  " + items[i] + "\n";
+    }
 
-      return result;
+    return result;
   }
 
   public static void quadratic() {
@@ -54,16 +54,16 @@ public class lab3 {
     double root0 = 0; //value for the roots
     double root1 = 0;
     if (discriminant > 0) {
-      root0 = minusbover2a + Math.sqrt(discriminant)/2/aval; //Calculating both real roots
-      root1 = minusbover2a - Math.sqrt(discriminant)/2/aval;
+      root0 = minusbover2a + Math.sqrt(discriminant) / 2 / aval; //Calculating both real roots
+      root1 = minusbover2a - Math.sqrt(discriminant) / 2 / aval;
       System.out.println("The equation has real roots");
       System.out.println("The roots are: " + root0 + " and " + root1);
     } else if (discriminant == 0) {
       System.out.println("The equation has one root");
       System.out.println("The root is " + minusbover2a); //Don't need to calculate roots; if the discriminant is 0 there is only a root with 0
     } else if (discriminant < 0) {
-      String root0str = "(" + minusbover2a + " + " + (Math.sqrt(discriminant*-1)/2/aval) + "i)"; //Parses imaginary roots into imaginary form.
-      String root1str = "(" + minusbover2a + " - " + (Math.sqrt(discriminant*-1)/2/aval) + "i)";
+      String root0str = "(" + minusbover2a + " + " + (Math.sqrt(discriminant * -1) / 2 / aval) + "i)"; //Parses imaginary roots into imaginary form.
+      String root1str = "(" + minusbover2a + " - " + (Math.sqrt(discriminant * -1) / 2 / aval) + "i)";
       System.out.println("The equation has no real roots");
       System.out.println("The imaginary roots are " + root0str + " and " + root1str);
     } else {
@@ -82,16 +82,12 @@ public class lab3 {
     double result;
     int display = 0;
     if (aval == -1) {
-      result = Math.sqrt(Math.pow(cval,2)-Math.pow(bval,2)); //Solving calculations
-      aval = result;
+      aval = Math.sqrt(Math.pow(cval,2)-Math.pow(bval,2)); //Solving calculations
     } else if (bval == -1) {
-      result = Math.sqrt(Math.pow(cval,2)-Math.pow(aval,2)); //Solving calculations
-      bval = result;
+      bval = Math.sqrt(Math.pow(cval,2)-Math.pow(aval,2)); //Solving calculations
     } else if (cval == -1) {
-      result = Math.sqrt(Math.pow(aval,2)+Math.pow(bval,2)); //Solving calculations
-      cval = result;
+      cval = Math.sqrt(Math.pow(aval,2)+Math.pow(bval,2)); //Solving calculations
     } else {
-      result = 0;
       System.out.println("You didn't put -1. Try again.");
       display = 1;
     }
