@@ -1,23 +1,23 @@
-import java.util.Scanner;
-import java.util.ArrayList;
-
 //********************************
 //*     Made By Jacob Root       *
 //*                              *
 //********************************
 
-public class lab4 {
+import java.util.Scanner;
+import java.util.ArrayList;
+
+public class RootJLab4 {
 
   static Scanner input = new Scanner(System.in); //Makes it so that everyone can use this Scanner
 
-public static void main(String[] args) {
+  public static void main(String[] args) {
     int response;
-    String[] items = {"End Program", "Add it up", "Grading", "Reciprocal", "LCM and GCD"}; //Menu code
+    String[] items = {"End Program", "Add it up", "Grading", "Reciprocal", "LCM and GCD", "Square Root"}; //Menu code
     String menu = makemenu(items);
 
     do {
       System.out.println(menu);
-      response = input.nextInt();
+      response = ensureint();
       if (response == 1) {
           additup(); //Runs the specified program
       } else if (response == 2) {
@@ -26,6 +26,8 @@ public static void main(String[] args) {
           reciprocal();
       } else if (response == 4) {
           LCMGCD();
+      } else if (response == 5) {
+        sqrt();
       } else {
       }
 
@@ -35,26 +37,53 @@ public static void main(String[] args) {
   }
 
   private static String makemenu(String[] items) { //Function generates a menu string so that I don't have to type it out.
-      String result = "";
-      int length = items.length; //*very* slight optimization
+    String result = "";
+    int length = items.length; //*very* slight optimization
 
-      for (int i = 0; i < length; i++) { //Iterates through the array items and generates a menu entry for each item on items
-        result += i + ":  " + items[i] + "\n";
+    for (int i = 0; i < length; i++) { //Iterates through the array items and generates a menu entry for each item on items
+      result += i + ":  " + items[i] + "\n";
+    }
+
+    return result;
+  }
+
+  private static int ensureint() {
+    boolean isint = false;
+    int result = 0;
+
+    while (!isint) {
+      if (input.hasNextInt()) {
+        result = input.nextInt();
+        isint = true;
       }
+      else {
+        input.nextLine();
+        System.out.print("Please enter an int\n");
+      }
+    }
 
-      return result;
+    return result;
   }
 
   private static void additup() {
     System.out.println("Enter an integer");
-    int lastnum = input.nextInt();
+    int lastnum = ensureint();
     int result = 0;
 
     for (int i = 0; i < lastnum + 1; i++) { //Runs each time with a different i value
       result += i;
+      if (i == 0) {
+        continue;
+      }
+      else if (i < lastnum) {
+        System.out.print(i + " + ");
+      } 
+      else {
+        System.out.print(i + " = ");
+      }
     }
 
-    System.out.println("Your result is " + result);
+    System.out.println(result);
   }
 
   private static void grading() {
@@ -64,7 +93,7 @@ public static void main(String[] args) {
   long counter = 0; //We're using longs so that the teacher could have a very big class
   do {
     System.out.println("Enter a grade (-1 to stop)");
-    grade = input.nextInt();
+    grade = ensureint();
     if (grade >= 90) {
       letters[0]++;
     } else if (grade < 90 && grade >= 80) {
@@ -101,15 +130,17 @@ public static void main(String[] args) {
     do {
       times++;
       System.out.println("Enter a number (0 to stop)");
-      num = input.nextInt();
+      num = ensureint();
       if (top == 0 && bottom == 0) {
         top = 1;
         bottom = num;
+        System.out.println("Your fractional sum is: " + top + " / " + bottom);
+        System.out.println("Your sum is:  " + (float) top / (float) bottom);
         continue;
       }
       if (num == 0) {
         System.out.println("Do you want to quit? 0 to quit");
-        num = input.nextInt();
+        num = ensureint();
         times--;
         continue;
       }
@@ -118,19 +149,42 @@ public static void main(String[] args) {
       bottom = num * bottom;
       top /= commonfactor;
       bottom /= commonfactor;
-      System.out.println("Your sum is: " + top + " / " + bottom);
+      System.out.println("Your fractional sum is: " + top + " / " + bottom);
+      System.out.println("Your sum is:  " + (float) top / (float) bottom);
     } while (num != 0 && times != 10); //The limit of 10 is 100% artificial; this program can do it until the integers overflow
   }
 
   private static void  LCMGCD() {
     System.out.println("Enter your first number: ");
-    int firstnum = input.nextInt();
+    int firstnum = ensureint();
     System.out.println("Enter your second number: ");
-    int secondnum = input.nextInt();
+    int secondnum = ensureint();
     int gcd = gcd(firstnum,secondnum);
     int lcm = Math.abs(firstnum*secondnum)/gcd;
     System.out.println("The GCD of the two numbers is: " + gcd);
     System.out.println("The LCM of the two numbers is: " + lcm);
+  }
+
+  private static void sqrt() { //Babylonian sqrt
+    System.out.print("Enter the number to square root:  ");
+    int sqrtnum = ensureint();
+    System.out.print("Enter the number of iterations you want:  ");
+    int iterations = ensureint();
+
+    String isimaginary;
+    if (0 > sqrtnum) { //Handles imaginary numbers
+      sqrtnum = -1 * sqrtnum;
+      isimaginary = "i";
+    } else {
+      isimaginary = "";
+    }
+    long magnitude = Math.round(Math.log10(sqrtnum)); // Calculates half the degree of the result
+    double initialguess = Math.pow(10,magnitude/2)*(sqrtnum/Math.pow(10,magnitude));
+
+    for (int i = 0; i < iterations; i++) {
+      initialguess = (initialguess + sqrtnum / initialguess) / 2;
+    }
+    System.out.println(initialguess + isimaginary);
   }
 
   private static int gcd(int firstnum, int secondnum) {

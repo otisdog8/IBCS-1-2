@@ -83,13 +83,17 @@ public class lab3 {
     int display = 0;
     if (aval == -1) {
       aval = Math.sqrt(Math.pow(cval,2)-Math.pow(bval,2)); //Solving calculations
+      result = aval;
     } else if (bval == -1) {
       bval = Math.sqrt(Math.pow(cval,2)-Math.pow(aval,2)); //Solving calculations
+      result = bval;
     } else if (cval == -1) {
       cval = Math.sqrt(Math.pow(aval,2)+Math.pow(bval,2)); //Solving calculations
+      result = cval;
     } else {
       System.out.println("You didn't put -1. Try again.");
       display = 1;
+      result = 0;
     }
     if (display == 0) {
       System.out.println("Value of the missing side is: " + result);

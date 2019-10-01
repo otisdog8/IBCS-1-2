@@ -10,7 +10,7 @@ import java.util.Queue;
 //*                              *
 //********************************
 
-public class lab5 {
+public class RootJLab5 {
   static Scanner input = new Scanner(System.in); //Makes it so that everyone can use this Scanner
   static Random rand = new Random(); //Makes it so everyone can use this Random
   public static void main(String[] args) {
@@ -39,11 +39,15 @@ public class lab5 {
       } else if (response == 9) {
         testprimegenerator();
       } else {
-
+        test();
       }
 
     } while (response != 0);
     System.out.println("Bye!");
+  }
+
+  private static void test() {
+    System.out.println(getchar());
   }
 
   private static String makemenu(String[] items) { //Function generates a menu string so that I don't have to type it out.
@@ -72,6 +76,7 @@ public class lab5 {
       history[1] = history[2];
       System.out.println("Enter a number");
       history[2] = getchar();
+      getchar();
       getchar(); //Little hack
       System.out.println("Your letter's value was " + history[2] + ". The character was " + (char) history[2] +".");
     } while (history[0] != 48 || history[1] != 48 || history[2] != 48);
@@ -86,11 +91,14 @@ public class lab5 {
       history[4] = history[5];
       System.out.println("Enter a character");
       int first = getchar();
+      getchar();
+      getchar();
       history[2] = first;
       getchar(); //So apparently this removes the newline character. Cool.
       System.out.println("Enter another one");
       int second = getchar();
       history[5] = second;
+      getchar();
       getchar();
       for (int i = first; i < second + 1; i++) { //Loops through to get all the characters
         System.out.println("ASCII code for " + (char) i + " is " + i + ".");
