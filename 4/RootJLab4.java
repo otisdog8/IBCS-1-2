@@ -76,7 +76,7 @@ public class RootJLab4 {
         continue;
       }
       else if (i < lastnum) {
-        System.out.print(i + " + ");
+        System.out.print(i + " + "); 
       } 
       else {
         System.out.print(i + " = ");
