@@ -7,7 +7,7 @@ public class RootJLab5a {
 
   public static void main(String[] args) {
     int response;
-    String[] items = {"End Program", "Get Character", "Start and End character", "Nextint"}; //Menu code
+    String[] items = {"End Program", "Get Character", "Start and End character", "Nextint", "Sum Integers"}; //Menu code
     String menu = makemenu(items);
 
     do {
@@ -18,11 +18,9 @@ public class RootJLab5a {
         } else if (response == 2) {
             intervalcharread();
         } else if (response == 3) {
-            charread();
+            displayint();
         } else if (response == 4) {
-            charread();
-        } else if (response == 5) {
-            charread();
+            sumints();
         } else {
         }
 
@@ -58,6 +56,7 @@ public class RootJLab5a {
 
     private static void intervalcharread() {
         System.out.print("Enter the same character twice to exit\n");
+        // Reads two characters and prints all the characters in between them (inclusive)
         int firstchar;
         int secondchar;
 
@@ -72,23 +71,75 @@ public class RootJLab5a {
         } while (firstchar != secondchar);
     }
 
+    private static void displayint() {
+        System.out.print("Enter a number with a space at the end:  ");
+        System.out.print(nextInt() + "\n");
+    }
+
+    private static void sumints() {
+        System.out.print("Enter two integers seperated by one space:  ");
+        int firstint = nextInt();
+        int secondint = nextInt();
+        System.out.print("Your sum is " + (firstint + secondint) + "\n");
+    }
+
+    private static int nextInt() {
+        int resultint = 0;
+        int sign = 1;
+
+        System.in.mark(3);
+        if (readonechar() == (int) '-') {
+            sign *= -1;
+        }
+        else {
+            resetmark();
+        }
+
+        while (nextcharint()) {
+            resultint *= 10;
+            resultint += readonechar() - (int) '0';
+        }
+
+        getchar();
+
+        return resultint*sign;
+    }
+
+    private static boolean nextcharint() {
+        System.in.mark(3); // Enough for an integer and the end of a line feed + carrige return combo
+        int onechar = readonechar(false);
+        resetmark();
+        if (onechar >= (int) '0' && onechar <= (int) '9') {
+            return true;
+        }
+        else {
+            return false;
+        }
+    } 
+
     private static void printval(int value) {
         System.out.println("Letter value was " + value + " and character was " + (char) value);
     }
 
     private static int readonechar() {
+        return readonechar(true);
+    }
+
+    private static int readonechar(boolean dellineend) {
         int[] result = new int[1];
-        result = readchars(1);
+        result = readchars(1,dellineend);
         return result[0];
     }
 
-    private static int[] readchars(int howmany) {
+    private static int[] readchars(int howmany, boolean dellineend) {
+        // Howmany = how many characters to fetch
+        // dellineend = delete the carrige return and line feed characters or not
         int[] result = new int[howmany];
         int i = 0;
         int newval;
         do {
             newval = getchar();
-            if (newval == 10 || newval == 13) {
+            if (newval == 10 || newval == 13 && dellineend) {
                 continue;
             }
             result[i] = newval;
@@ -108,6 +159,14 @@ public class RootJLab5a {
         }
     }
 
+    private static void resetmark() {
+        try {
+            System.in.reset();
+        }
+        catch (IOException e) {
+            System.out.print("IOException caught from reset\n");
+        }
+    }
 
     private static int ensureint() {
         boolean isint = false;

@@ -1,17 +1,11 @@
-  private static int ensureint() {
-    boolean isint = false;
-    int result = 0;
+  private static int gcd(int firstnum, int secondnum) {
+    int remainder = 0;
 
-    while (!isint) {
-      if (input.hasNextInt()) {
-        result = input.nextInt();
-        isint = true;
-      }
-      else {
-        input.nextLine();
-        System.out.print("Please enter an int\n");
-      }
-    }
+    do { //Euclidean GCD
+      remainder = firstnum % secondnum;
+      firstnum = secondnum;
+      secondnum = remainder;
+    } while (remainder != 0);
 
-    return result;
+    return firstnum;
   }

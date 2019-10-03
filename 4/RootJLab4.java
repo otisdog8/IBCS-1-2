@@ -48,6 +48,7 @@ public class RootJLab4 {
   }
 
   private static int ensureint() {
+    // Makes sure that an int is inputted
     boolean isint = false;
     int result = 0;
 
@@ -73,6 +74,7 @@ public class RootJLab4 {
     for (int i = 0; i < lastnum + 1; i++) { //Runs each time with a different i value
       result += i;
       if (i == 0) {
+        // Doesn't run on i=0, otherwise generates and prints a string that showcases the additup equation
         continue;
       }
       else if (i < lastnum) {
@@ -144,7 +146,7 @@ public class RootJLab4 {
         times--;
         continue;
       }
-      commonfactor = gcd((bottom + top * num), num * bottom);
+      commonfactor = gcd((bottom + top * num), num * bottom); // This stuff calculates and reduces the fraction
       top = bottom + top * num;
       bottom = num * bottom;
       top /= commonfactor;
@@ -160,7 +162,7 @@ public class RootJLab4 {
     System.out.println("Enter your second number: ");
     int secondnum = ensureint();
     int gcd = gcd(firstnum,secondnum);
-    int lcm = Math.abs(firstnum*secondnum)/gcd;
+    int lcm = Math.abs(firstnum*secondnum)/gcd; // Calculates LCM from GCD
     System.out.println("The GCD of the two numbers is: " + gcd);
     System.out.println("The LCM of the two numbers is: " + lcm);
   }
@@ -182,7 +184,8 @@ public class RootJLab4 {
     double initialguess = Math.pow(10,magnitude/2)*(sqrtnum/Math.pow(10,magnitude));
 
     for (int i = 0; i < iterations; i++) {
-      initialguess = (initialguess + sqrtnum / initialguess) / 2;
+      initialguess = (initialguess + sqrtnum / initialguess) / 2; //Babylonian equation
+      System.out.print(initialguess + "\n");
     }
     System.out.println(initialguess + isimaginary);
   }
