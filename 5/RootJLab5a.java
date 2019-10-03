@@ -106,7 +106,7 @@ public class RootJLab5a {
     }
 
     private static boolean nextcharint() {
-        System.in.mark(3); // Enough for an integer and the end of a line feed + carrige return combo
+        System.in.mark(1); // Enough to look at the next character
         int onechar = readonechar(false);
         resetmark();
         if (onechar >= (int) '0' && onechar <= (int) '9') {
