@@ -1,9 +1,16 @@
+//********************************
+//*     Made By Jacob Root       *
+//*                              *
+//********************************
+
+
 import java.io.*;
 import java.util.Scanner;
 import java.util.Random;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.ArrayList;
+
 
 public class RootJLab5b {
    static Scanner input = new Scanner(System.in); //Makes it so that everyone can use this Scanner
@@ -97,19 +104,15 @@ public class RootJLab5b {
     private static void horizontaltabs() {
         System.out.println("Enter the number of lines to print");
         int linenum = input.nextInt();
-        for(int i = 0; i < linenum; i++) {
-            tab(linenum - i,i); // Using recursion to avoid nested loops
+        for(int i = 0; i < linenum + 1; i++) {
+            for(int j = 0; j < i; j++) {
+                System.out.print(linenum - i + 1);
+                System.out.print((char) 9);
+            }
             System.out.println();
         }
     }
 
-    private static void tab(int printnum, int tabnum) {
-        System.out.print(printnum);
-        System.out.print((char) 9);
-        if (tabnum > 0) {
-            tab(printnum,tabnum-1);
-        }
-    }
 
     private static void rectangle() {
         System.out.println("Enter the height of the rectangle");
@@ -149,7 +152,9 @@ public class RootJLab5b {
         System.out.println("Your prime is:  " + primes.get(primes.size() - 1));
     }
 
-    private static ArrayList<Integer> primefinder(int frame_size, int num_to_find, int max_frames) { //Frame_size for sieve, num_to_find is how many primes to find, max_frames is the meximum amount of frames to find
+    private static ArrayList<Integer> primefinder(int frame_size, int num_to_find, int max_frames) {
+        // Frame_size for sieve, num_to_find is how many primes to find, max_frames is the meximum amount of frames to find
+        // sieve of eratosthenes
         ArrayList<Integer> primes = new ArrayList<Integer>();
         Queue<Integer> primequeue = new LinkedList<Integer>();
         ArrayList<Integer> nums = new ArrayList<Integer>();
@@ -174,7 +179,6 @@ public class RootJLab5b {
                 primes.add(nums.get(0));
                 number_of_primes++;
             }
-
             } while (primequeue.size() != 0 && nums.size() != 1 && number_of_primes < num_to_find);
 
             primequeue.addAll(primes);

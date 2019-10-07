@@ -1,3 +1,9 @@
+//********************************
+//*     Made By Jacob Root       *
+//*                              *
+//********************************
+
+
 import java.io.*;
 import java.util.Scanner;
 
@@ -76,7 +82,7 @@ public class RootJLab5a {
         System.out.print(nextInt() + "\n");
     }
 
-    private static void sumints() {
+    private static void sumints() { 
         System.out.print("Enter two integers seperated by one space:  ");
         int firstint = nextInt();
         int secondint = nextInt();

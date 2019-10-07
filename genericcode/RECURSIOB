@@ -1,0 +1,3 @@
+        if (tabnum > 0) {
+            tab(printnum,tabnum-1);
+        }
