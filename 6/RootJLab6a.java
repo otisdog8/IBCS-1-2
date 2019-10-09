@@ -92,7 +92,7 @@ public class RootJLab6a {
 
     private static void testprimes() {
         int numtofind = 1000;
-        ArrayList<Long> primes = sieve(numtofind,1000000);
+        ArrayList<Long> primes = sieve(numtofind,10000);
         for (int i = 0; i < numtofind; i++) {
             System.out.println(primes.get(i));
         }
@@ -103,6 +103,8 @@ public class RootJLab6a {
         int numfound = 0;
         boolean primefound = false;
         ArrayList<Long> results = new ArrayList<Long>();
+        int add;
+
 
         do {
             boolean[] primes = new boolean[framesize];
@@ -110,13 +112,19 @@ public class RootJLab6a {
                 primes[i] = true;
             }
             
-            for (int i = 0; i < results.size(); i++) {
-                prime = results.get(i);
-                
-            }
+           // for (int index = 0; index < results.size(); index++) {
+            //    long prime = results.get(index);
+             //   add = 0;
+              //  if ((framesize + offset) / prime * prime - (framesize + offset) < 0) {
+               //     add = 1;
+                //}
+                //for (long i = (framesize + offset) / prime * prime + add * prime; i < framesize; i += prime) {
+              //      primes[ (int) (i - offset) ] = false;
+            //    }
+            //}
 
-            for (int index = 0; Math.pow(index + offset, 2) < framesize + offset; index++) {
-                if (primes[index] == true) {
+            for (int index = offset; index < framesize + offset; index++) {
+                if (primes[index-offset] == true) {
                     int prime = index + offset;
 
                     for (int i = prime; i < framesize + offset; i += prime) {
