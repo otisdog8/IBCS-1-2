@@ -20,13 +20,13 @@ public class RootJLab6a {
         int response;
         
 
-        fillprimearray(primearray,num_to_find);
-
-        do {
-            System.out.print("\n Enter the prime number you would like to find:   ");
-            response = ensureint();
-            System.out.print("\nFound prime number:  " + primearray[response-1]);
-        } while (response != -1);
+        //fillprimearray(primearray,num_to_find);
+        testprimes();
+        //do {
+        //    System.out.print("\n Enter the prime number you would like to find:   ");
+        //    response = ensureint();
+        //    System.out.print("\nFound prime number:  " + primearray[response-1]);
+        //} while (response != -1);
     }
 
     private static int ensureint() {
@@ -90,11 +90,54 @@ public class RootJLab6a {
         return primes;
     }
 
-    private static int[] sieve(int numtoreach) {
-        boolean[] primes = new boolean[numtofind+1];
-        for (int i; i < numtofind; i++) {
-            primes[i] = true;
+    private static void testprimes() {
+        int numtofind = 1000;
+        ArrayList<Long> primes = sieve(numtofind,1000000);
+        for (int i = 0; i < numtofind; i++) {
+            System.out.println(primes.get(i));
         }
-        for (int i; i*i <= )
+    }
+
+    private static ArrayList<Long> sieve(int numofprimes,int framesize) {
+        int offset = +2;
+        int numfound = 0;
+        boolean primefound = false;
+        ArrayList<Long> results = new ArrayList<Long>();
+
+        do {
+            boolean[] primes = new boolean[framesize];
+            for (int i = 0; i < framesize; i++) {
+                primes[i] = true;
+            }
+            
+            for (int i = 0; i < results.size(); i++) {
+                prime = results.get(i);
+                
+            }
+
+            for (int index = 0; Math.pow(index + offset, 2) < framesize + offset; index++) {
+                if (primes[index] == true) {
+                    int prime = index + offset;
+
+                    for (int i = prime; i < framesize + offset; i += prime) {
+                        primes[i-offset] = false;
+                    }
+                    
+                    results.add((long) prime);
+                    numfound++;
+                }
+            }
+
+            if (numfound > numofprimes) {
+                primefound = true;
+            }
+            
+            
+            offset += framesize;
+
+            
+        } while (!primefound);
+
+        return results;
     }
 }

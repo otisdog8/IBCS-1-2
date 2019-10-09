@@ -1,3 +1,16 @@
+    private static void horizontaltabs() {
+        System.out.println("Enter the number of lines to print");
+        int linenum = input.nextInt();
+        for(int i = 0; i < linenum; i++) {
+            tab(linenum - i,i); // Using recursion to avoid nested loops
+            System.out.println();
+        }
+    }
+
+    private static void tab(int printnum, int tabnum) {
+        System.out.print(printnum);
+        System.out.print((char) 9);
         if (tabnum > 0) {
             tab(printnum,tabnum-1);
         }
+    }
