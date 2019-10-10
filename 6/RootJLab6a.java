@@ -112,8 +112,8 @@ public class RootJLab6a {
                 primes[i] = true;
             }
             
-            for (int index = 0; index < results.size(); index++) {
-                long prime = results.get(index);
+            for (int index = 0; index < numfound; index++) {
+                long prime = results[index];
                 firstvalue = (offset / prime) * prime - offset;
                 if (firstvalue < 0L) {
                     firstvalue += prime;
@@ -138,8 +138,9 @@ public class RootJLab6a {
                     results[numfound] = (long) prime;
                     numfound++;
                     if (numfound == numofprimes) {
-                        break;
                         primefound = true;
+                        break;
+
                     }
                 }
             }
