@@ -14,10 +14,10 @@ public class RootJLab6a {
 
     public static void main(String[] args) {
         System.out.print("How many primes do you want to find:   ");
-        int num_to_find = ensureint();
+        //int num_to_find = ensureint();
         
-        long[] primearray = new long[num_to_find];
-        int response;
+        //long[] primearray = new long[num_to_find];
+        //int response;
         
 
         //fillprimearray(primearray,num_to_find);
@@ -91,8 +91,8 @@ public class RootJLab6a {
     }
 
     private static void testprimes() {
-        int numtofind = 500000000;
-        long[] primes = sieve(numtofind, 2147483645);
+        int numtofind = 1000000000;
+        long[] primes = sieve(numtofind, 2147483645); // 2147483645
 
             System.out.println(primes[numtofind-1]);
         
