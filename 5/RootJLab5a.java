@@ -50,12 +50,10 @@ public class RootJLab5a {
         System.out.print("Enter any character twice to exit\n");
         int prev = -3; // -1 corresponds to end of stream, -2 corresponds to IOException
         int newval = -3;
-        char character = 'a'; //randomly chosen
-
+        
         do {
             prev = newval;
             newval = readonechar();
-            character = (char) newval;
             printval(newval);
         } while (prev != newval);
     }
@@ -72,7 +70,7 @@ public class RootJLab5a {
             System.out.print("\nEnter an end character:  ");
             secondchar = readonechar();
             for (int i = Math.min(firstchar,secondchar); i <= Math.max(firstchar,secondchar); i++) {
-                printval(i);
+                printval(i); //Prints all intermediate 
             }
         } while (firstchar != secondchar);
     }
