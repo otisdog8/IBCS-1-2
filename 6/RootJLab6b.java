@@ -16,9 +16,8 @@ public class RootJLab6b {
     public static void main(String[] args) throws IOException {
         int response;
         String[] items = { "End Program", "Sum", "Multiplication table", "Fibbonacci numbers", "Interest rate",
-                "Square picture", "Diamiond picture", "X xpicture", "Pot shots at pi"}; // Menu code
+                "Square picture", "Diamiond picture", "X xpicture", "Pot shots at pi" }; // Menu code
         String menu = makemenu(items);
-        System.out.print(calculatepi(5000000));
         do {
             System.out.println(menu);
             response = ensureint();
@@ -62,11 +61,11 @@ public class RootJLab6b {
         for (int i = 7; i < 70001; i++) {
             total += i;
         }
-        System.out.println("The sum is " + total); // One line
+        System.out.println("The sum is " + total);
     }
 
     private static void multiplicationtable() {
-        System.out.println("Enter the width of your numtiplication table");
+        System.out.println("Enter the width of your multiplcation table");
         int width = ensureint();
         System.out.println("Enter the height of your multiplcation table");
         int height = ensureint();
@@ -85,31 +84,43 @@ public class RootJLab6b {
         nums.add(1L);
         System.out.println("How many fibonacci numbers do you want to calculate?");
         int num = ensureint();
-        for (int i = 0; i < num-2; i++) {
-            nums.add(nums.get(nums.size() - 1) + nums.get(nums.size() - 2)); //Adds next term
+        for (int i = 0; i < num - 2; i++) {
+            nums.add(nums.get(nums.size() - 1) + nums.get(nums.size() - 2)); // Adds next term
         }
         System.out.println("All fibonacci numbers found are " + nums);
         System.out.println("Your number is: " + nums.get(num - 1));
     }
 
-    private static void interestcalc() { // Redo
-        System.out.println("Enter your balance");
+    private static void interestcalc() {
+        System.out.print("Enter your balance:   ");
         double bal = input.nextFloat();
         double balifnosave = bal;
-        System.out.println("Enter how much you want to save each month");
+        double balinfinite = bal;
+        double balifnosaveinfinite = bal;
+        System.out.print("Enter how much you want to save each month:   ");
         double save = input.nextFloat();
-        System.out.println("Enter your monthly interest rate (%)");
+        System.out.print("Enter your annual interest rate (%):  ");
         double interest = input.nextFloat();
         for (int i = 0; i < 360; i++) {
             bal += save; // Adds monthly deposit
-            bal *= interest / 100 + 1; // Adds interest
-            balifnosave *= interest / 100 + 1; // Caclulates the interest if they didn't save
+            balinfinite += save;
+
+            bal *= interest / 1200 + 1; // Adds interest
+            balifnosave *= interest / 1200 + 1; // Caclulates the interest if they didn't save
+
+            balinfinite *= Math.pow(Math.E, interest / 1200); // Calculates indefinitely compunding interest
+            balifnosaveinfinite *= Math.pow(Math.E, interest / 1200);
 
         }
         bal = Math.round(bal * 100.0) / 100.0; // Rounds numbers
         balifnosave = Math.round(balifnosave * 100.0) / 100.0;
+        balinfinite = Math.round(balinfinite * 100.0) / 100.0;
+        balifnosaveinfinite = Math.round(balifnosaveinfinite * 100.0) / 100.0;
+
         System.out.println("You have " + bal + " dollars in your account. If you didn't save, you would've had "
                 + balifnosave + " dollars.");
+        System.out.println("If it compounded indefinitely and you didn't save you would have " + balifnosaveinfinite
+                + ". If you did save and it compounded indefinitely, you would have " + balinfinite + " dollars.");
     }
 
     private static void squarepic() {
@@ -163,7 +174,7 @@ public class RootJLab6b {
             }
             System.out.print("*");
             print = 0;
-            for (int l = 0; l < Math.abs(i) * 2 - 1; l++) { // Center s[acing
+            for (int l = 0; l < Math.abs(i) * 2 - 1; l++) { // Center spacing
                 print = 1;
                 System.out.print(" ");
             }
