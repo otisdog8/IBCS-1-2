@@ -1,0 +1,55 @@
+    private static long[] sieve(int numofprimes,int framesize) {
+        long offset = +2;
+        int numfound = 0;
+        boolean primefound = false;
+        long[] results = new long[numofprimes];
+        long firstvalue;
+
+
+        do {
+            boolean[] primes = new boolean[framesize];
+            for (int i = 0; i < framesize; i++) {
+                primes[i] = true;
+            }
+            
+            for (int index = 0; index < numfound; index++) {
+                long prime = results[index];
+                firstvalue = (offset / prime) * prime - offset;
+                if (firstvalue < 0L) {
+                    firstvalue += prime;
+                }
+                firstvalue += offset;
+
+                for (long i = firstvalue; i < framesize + offset; i += prime) {
+                        primes[(int) (i-offset)] = false;
+                }
+
+                
+            }
+
+            for (int index = 0; index < framesize; index++) {
+                if (primes[index] == true) {
+                    long prime = index + offset;
+
+                    for (long i = prime; i < framesize + offset; i += prime) {
+                        primes[(int) (i-offset)] = false;
+                    }
+                    
+                    results[numfound] = (long) prime;
+                    numfound++;
+                    if (numfound == numofprimes) {
+                        primefound = true;
+                        break;
+
+                    }
+                }
+            }
+
+
+            offset += framesize;
+
+            
+        } while (!primefound);
+
+        return results;
+    }

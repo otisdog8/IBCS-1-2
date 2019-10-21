@@ -186,5 +186,5 @@ public class RootJLab5b {
         } while (frames_calculated != max_frames && number_of_primes < num_to_find);
 
         return primes;
-  }
+    }
 }
