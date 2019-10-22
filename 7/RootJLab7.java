@@ -91,21 +91,19 @@ public class RootJLab7 {
         String[][] newarray = copy2darray(array);
         String[] swap = new String[5]; //Swap Assistant
         boolean sorted;
-        int check1; //Converts array aspects into ints
-        int check2;
+        long check1; //Converts array aspects into ints
+        long check2;
         int maxim = 0;
 
         for (int i = 0; i < newarray.length; i++) {
-            maxim = Math.max(newarray[i][3].length(),maxim);
+            maxim = Math.max(newarray[i][2].length(),maxim);
         }
 
         do {
             sorted = true;
             for (int i = 0; i < newarray.length - 1; i++) {
 
-                check1 = tobase26(newarray[i][2],maxim);
-                check2 = tobase26(newarray[i+1][2],maxim); 
-                if (check1 > check2) {
+                if (comparestrings(newarray[i][2],newarray[i+1][2],maxim)) {
                     swap = newarray[i];
                     newarray[i] = newarray[i+1];
                     newarray[i+1] = swap;
@@ -158,19 +156,38 @@ public class RootJLab7 {
 
     }
 
-    private static int tobase26(String lastname,int padding) {
-        int result;
+    private static boolean comparestrings(String check1, String check2, int padding) {
+        check1 = padstring(check1, padding, 'a').toLowerCase();
+        check2 = padstring(check2, padding, 'a').toLowerCase();
 
-        if (lastname.length() < padding) {
-            for (int i = 0; i < padding - lastname.length(); i++) {
-                lastname += "a";
+        // recursively calculate which string is bigger
+        return checkstring(check1, check2, 0);
+    }
+
+    private static boolean checkstring(String check1, String check2, int index) { 
+        if ((int) check1.charAt(index) > (int) check2.charAt(index)) {
+            return true;
+        }
+        else if ((int) check1.charAt(index) < (int) check2.charAt(index)) {
+            return false;
+        }
+        else {
+            index++;
+            if (index > check1.length() - 1) {
+                return false;
             }
+            return checkstring(check1,check2,index);
         }
 
-        result = Integer.parseInt(lastname,26);
+    }
 
-        return result;
-
+    private static String padstring(String string, int padding, char padchar) {
+        if (string.length() < padding) {
+            for (int i = 0; i < padding - string.length() + 1; i++) {
+                string += padchar;
+            }
+        }
+        return string;
     }
 
     private static Scanner generatescanner(String filename) {
