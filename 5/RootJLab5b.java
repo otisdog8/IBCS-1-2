@@ -7,9 +7,7 @@
 import java.io.*;
 import java.util.Scanner;
 import java.util.Random;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.ArrayList;
+
 
 
 public class RootJLab5b {
@@ -19,7 +17,7 @@ public class RootJLab5b {
 
   public static void main(String[] args) {
     int response;
-    String[] items = {"End Program", "Get Character", "Start and End character", "Nextint", "Sum Integers"}; //Menu code
+    String[] items = {"End Program", "Horizontal Tabs", "Numbergame", "Rectangle", "Factorials"}; //Menu code
     String menu = makemenu(items);
 
     do {
@@ -146,45 +144,72 @@ public class RootJLab5b {
     }
 
     private static void thousandprime() {
-        System.out.print("Enter the nth prime that you want to find:  ");
-        int prime = ensureint();
-        ArrayList<Integer> primes = primefinder(1000000,prime,0);
-        System.out.println("Your prime is:  " + primes.get(primes.size() - 1));
+        System.out.print("How many primes do you want to find:    ");
+        int numtofind = ensureint();
+        long[] primes = sieve(numtofind,Integer.MAX_VALUE-5);
+        int prime = 1;
+        do {
+            System.out.print("Enter the nth prime that you want to find, 0 to quit:  ");
+            prime = ensureint();
+            System.out.println("Your prime is:  " + primes[prime-1]);
+
+        } while (prime != 0);
+
     }
 
-    private static ArrayList<Integer> primefinder(int frame_size, int num_to_find, int max_frames) {
-        // Frame_size for sieve, num_to_find is how many primes to find, max_frames is the meximum amount of frames to find
-        // sieve of eratosthenes
-        ArrayList<Integer> primes = new ArrayList<Integer>();
-        Queue<Integer> primequeue = new LinkedList<Integer>();
-        ArrayList<Integer> nums = new ArrayList<Integer>();
-        int frames_calculated = 0;
-        int number_of_primes = 1;
+    private static long[] sieve(int numofprimes,int framesize) {
+        long offset = +2;
+        int numfound = 0;
+        boolean primefound = false;
+        long[] results = new long[numofprimes];
+        long firstvalue;
 
-        primes.add(2);
-        primequeue.add(2);
 
         do {
-            nums.clear();
+            boolean[] primes = new boolean[framesize];
+            for (int i = 0; i < framesize; i++) {
+                primes[i] = true;
+            }
+            
+            for (int index = 0; index < numfound; index++) {
+                long prime = results[index];
+                firstvalue = (offset / prime) * prime - offset;
+                if (firstvalue < 0L) {
+                    firstvalue += prime;
+                }
+                firstvalue += offset;
 
-            for (int i = frames_calculated*frame_size+3; i < (frames_calculated+1)*frame_size; i++) {
-                nums.add(i);
+                for (long i = firstvalue; i < framesize + offset; i += prime) {
+                        primes[(int) (i-offset)] = false;
+                }
+
+                
             }
 
-            do {
-                final int testednum = primequeue.poll();
-                nums.removeIf(n -> (n % testednum == 0));
-                if (primequeue.size() == 0) {
-                primequeue.add(nums.get(0));
-                primes.add(nums.get(0));
-                number_of_primes++;
+            for (int index = 0; index < framesize; index++) {
+                if (primes[index] == true) {
+                    long prime = index + offset;
+
+                    for (long i = prime; i < framesize + offset; i += prime) {
+                        primes[(int) (i-offset)] = false;
+                    }
+                    
+                    results[numfound] = (long) prime;
+                    numfound++;
+                    if (numfound == numofprimes) {
+                        primefound = true;
+                        break;
+
+                    }
+                }
             }
-            } while (primequeue.size() != 0 && nums.size() != 1 && number_of_primes < num_to_find);
 
-            primequeue.addAll(primes);
-            frames_calculated++;
-        } while (frames_calculated != max_frames && number_of_primes < num_to_find);
 
-        return primes;
+            offset += framesize;
+
+            
+        } while (!primefound);
+
+        return results;
     }
 }

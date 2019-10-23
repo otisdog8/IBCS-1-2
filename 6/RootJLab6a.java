@@ -23,7 +23,7 @@ public class RootJLab6a {
         primearray = fillprimearray(primearray,num_to_find);
 
         do {
-            System.out.print("\n Enter the prime number you would like to find:   ");
+            System.out.print("\n Enter the prime number you would like to find (-1 to quit):   ");
             response = ensureint();
             System.out.print("\nFound prime number:  " + primearray[response-1]);
         } while (response != -1);
@@ -52,7 +52,7 @@ public class RootJLab6a {
     }
 
     private static long[] fillprimearray(long[] primearray, int num_to_find) {
-        primearray = sieve(num_to_find, 2147483645);
+        primearray = sieve(num_to_find, 2147483645); // Max value 2147483645
         return primearray;
     }
     
@@ -64,10 +64,9 @@ public class RootJLab6a {
         boolean primefound = false;
         long[] results = new long[numofprimes];
         long firstvalue;
-
+        boolean[] primes = new boolean[framesize];
 
         do {
-            boolean[] primes = new boolean[framesize];
             for (int i = 0; i < framesize; i++) {
                 primes[i] = true;
             }
