@@ -1,7 +1,8 @@
-import java.io.*;
+import java.util.Comparator;
 import java.util.Scanner;
 import java.io.File;
-import java.io.FileNotFoundException;;
+import java.io.FileNotFoundException;
+import java.io.*;
 
 public class RootJLab7 {
     static Scanner input = new Scanner(System.in); // Makes it so that everyone can use this Scanner
@@ -68,80 +69,74 @@ public class RootJLab7 {
 
     private static void sort() {
         int length = getfilelength("classlist.txt");
-        String[][] students = new String[length][5];
-        String[][] studentsbystudentid;
-        String[][] studentsbylastname;
+        int maxim = 0;
+        String[][] strings = new String[length][5];
+        Student[] students;
+        Student[] studentsbystudentid;
+        Student[] studentsbylastname;
 
         Scanner scanner = generatescanner("classlist.txt");
 
         for (int i = 0; i < length; i++) {
-            students[i] = scanner.nextLine().split(" ");
+            strings[i] = scanner.nextLine().split(" ");
         }
 
-        studentsbystudentid = bubblesortstudentid(students);
-        studentsbylastname = bubblesortlastname(students);
+        
+        students = tostudentarray(strings);
+
+        for (int i = 0; i < students.length; i++) {
+            maxim = Math.max(students[i].lastname.length(),maxim);
+        }
+
+        LastNameComparator lastnametester = new LastNameComparator(maxim);
+        StudentIDComparator studentIDcheck = new StudentIDComparator();
+
+
+        studentsbystudentid = bubblesort(students, studentIDcheck);
+        studentsbylastname = bubblesort(students, lastnametester);
+
+
 
         generatefile(studentsbylastname, "studentLastNamED.txt");
-
         generatefile(studentsbystudentid, "studentIDed.txt");
-
     }
 
-    private static String[][] bubblesortlastname(String[][] array) {
-        String[][] newarray = copy2darray(array);
-        String[] swap = new String[5]; //Swap Assistant
+    private static Student[] bubblesort(Student[] array, Comparator comparator) {
+        Student[] newarray = copyarray(array);
+        Student swap; //Swap Assistant
         boolean sorted;
-        long check1; //Converts array aspects into ints
-        long check2;
-        int maxim = 0;
 
-        for (int i = 0; i < newarray.length; i++) {
-            maxim = Math.max(newarray[i][2].length(),maxim);
+        do {
+            sorted = true;
+            for (int i = 0; i < newarray.length - 1; i++) {
+
+                if (comparatortoboolean(comparator.compare(newarray[i], newarray[i+1]))) {
+                    swap = newarray[i];
+                    newarray[i] = newarray[i+1];
+                    newarray[i+1] = swap;
+                    sorted = false;
+                }
+            }
+        } while (!sorted);
+
+        return newarray;
+    }
+
+    private static Student[] tostudentarray(String[][] array) {
+        Student[] newarray = new Student[array.length];
+
+        for (int i = 0; i < array.length; i++) {
+            newarray[i] = new Student(array[i]);
         }
 
-        do {
-            sorted = true;
-            for (int i = 0; i < newarray.length - 1; i++) {
-
-                if (comparestrings(newarray[i][2],newarray[i+1][2],maxim)) {
-                    swap = newarray[i];
-                    newarray[i] = newarray[i+1];
-                    newarray[i+1] = swap;
-                    sorted = false;
-                }
-            }
-        } while (!sorted);
         return newarray;
     }
 
-    private static String[][] bubblesortstudentid(String[][] array) {
-        String[][] newarray = copy2darray(array);
-        String[] swap = new String[5]; //Swap Assistant
-        boolean sorted;
-        int check1; //Converts array aspects into ints
-        int check2;
-
-        do {
-            sorted = true;
-            for (int i = 0; i < newarray.length - 1; i++) {
-                check1 = Integer.parseInt(newarray[i][0]);
-                check2 = Integer.parseInt(newarray[i+1][0]); 
-                if (check1 > check2) {
-                    swap = newarray[i];
-                    newarray[i] = newarray[i+1];
-                    newarray[i+1] = swap;
-                    sorted = false;
-                }
-            }
-        } while (!sorted);
-        return newarray;
-    }
-
-    private static void generatefile(String[][] array, String filename) {
+    private static void generatefile(Student[] array, String filename) {
         String str = "";
         for (int i = 0; i < array.length; i++) {
             for (int j = 0; j < 5; j++) {
-                str += array[i][j] + " ";
+                str += array[i].data[j] + " ";
             }
             str += "\n";
         }
@@ -149,46 +144,13 @@ public class RootJLab7 {
             BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
             writer.write(str);
             writer.close();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             System.out.print("Caught an error\n");
         }
 
     }
 
-    private static boolean comparestrings(String check1, String check2, int padding) {
-        check1 = padstring(check1, padding, 'a').toLowerCase();
-        check2 = padstring(check2, padding, 'a').toLowerCase();
 
-        // recursively calculate which string is bigger
-        return checkstring(check1, check2, 0);
-    }
-
-    private static boolean checkstring(String check1, String check2, int index) { 
-        if ((int) check1.charAt(index) > (int) check2.charAt(index)) {
-            return true;
-        }
-        else if ((int) check1.charAt(index) < (int) check2.charAt(index)) {
-            return false;
-        }
-        else {
-            index++;
-            if (index > check1.length() - 1) {
-                return false;
-            }
-            return checkstring(check1,check2,index);
-        }
-
-    }
-
-    private static String padstring(String string, int padding, char padchar) {
-        if (string.length() < padding) {
-            for (int i = 0; i < padding - string.length() + 1; i++) {
-                string += padchar;
-            }
-        }
-        return string;
-    }
 
     private static Scanner generatescanner(String filename) {
         File file = new File(filename);
@@ -202,13 +164,19 @@ public class RootJLab7 {
 
     }
 
-    private static String[][] copy2darray(String[][] array) {
-        int length = array[0].length;
-        String[][] newarray = new String[array.length][length];
+    private static boolean comparatortoboolean(int result) {
+        if (result > 0) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    private static Student[] copyarray(Student[] array) {
+        Student[] newarray = new Student[array.length];
         for (int i = 0; i < array.length; i++) {
-            for (int j = 0; j < length; j++) {
-                newarray[i][j] = array[i][j];
-            }
+            newarray[i] = array[i];
         }
         return newarray;
     }
@@ -241,4 +209,73 @@ public class RootJLab7 {
 
         return result;
     }
+}
+
+class Student {
+    int studentnum;
+    int grade;
+    String lastname;
+    String firstname;
+    String gender;
+    String[] data;
+
+    public Student(String[] data) {
+        this.studentnum = Integer.parseInt(data[0]);
+        this.grade = Integer.parseInt(data[1]);
+        this.lastname = data[2];
+        this.firstname = data[3];
+        this.gender = data[4];
+        this.data = data;
+    }
+}
+
+class LastNameComparator implements Comparator<Student> {
+    int padding;
+
+    LastNameComparator(int padding) {
+        this.padding = padding;    
+    }
+
+    public int compare(Student o1, Student o2) {
+        return comparestrings(o1.lastname,o2.lastname,this.padding);
+    }
+
+    private static String padstring(String string, int padding, char padchar) {
+        if (string.length() < padding) {
+            for (int i = 0; i < padding - string.length() + 1; i++) {
+                string += padchar;
+            }
+        }
+        return string;
+    }
+
+    private static int comparestrings(String check1, String check2, int padding) {
+        check1 = padstring(check1, padding, 'a').toLowerCase();
+        check2 = padstring(check2, padding, 'a').toLowerCase();
+
+        // recursively calculate which string is bigger
+        return checkstring(check1, check2, 0);
+    }
+
+    private static int checkstring(String check1, String check2, int index) {
+        if ((int) check1.charAt(index) > (int) check2.charAt(index)) {
+            return 1;
+        } else if ((int) check1.charAt(index) < (int) check2.charAt(index)) {
+            return -1;
+        } else {
+            index++;
+            if (index > check1.length() - 1) {
+                return 0;
+            }
+            return checkstring(check1, check2, index);
+        }
+
+    }
+}
+
+class StudentIDComparator implements Comparator<Student> {
+    public int compare(Student o1, Student o2) {
+        return (int) Math.signum(o1.studentnum - o2.studentnum);
+    }
+
 }

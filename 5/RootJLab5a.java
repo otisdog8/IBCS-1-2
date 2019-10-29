@@ -92,19 +92,19 @@ public class RootJLab5a {
         int sign = 1;
 
         System.in.mark(3);
-        if (readonechar() == (int) '-') {
+        if (readonechar() == (int) '-') { //Checks for sign
             sign *= -1;
         }
         else {
             resetmark();
         }
 
-        while (nextcharint()) {
+        while (nextcharint()) { //Generates an integer
             resultint *= 10;
             resultint += readonechar() - (int) '0';
         }
 
-        getchar();
+        getchar(); //Consumes the end character
 
         return resultint*sign;
     }

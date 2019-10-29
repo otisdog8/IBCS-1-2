@@ -10,14 +10,14 @@ import java.util.Random;
 
 
 
-public class RootJLab5b {
+public class RootJLab6 {
    static Scanner input = new Scanner(System.in); //Makes it so that everyone can use this Scanner
    static Random rand = new Random(); //Makes it so everyone can use this Random
 
 
   public static void main(String[] args) {
     int response;
-    String[] items = {"End Program", "Horizontal Tabs", "Numbergame", "Rectangle", "Factorials"}; //Menu code
+    String[] items = {"End Program", "Horizontal Tabs", "Numbergame", "Rectangle", "Factorials","Thousand Primes"}; //Menu code
     String menu = makemenu(items);
 
     do {
@@ -102,10 +102,10 @@ public class RootJLab5b {
     private static void horizontaltabs() {
         System.out.println("Enter the number of lines to print");
         int linenum = input.nextInt();
-        for(int i = 0; i < linenum + 1; i++) {
-            for(int j = 0; j < i; j++) {
+        for(int i = 0; i < linenum + 1; i++) { 
+            for(int j = 0; j < i; j++) { 
                 System.out.print(linenum - i + 1);
-                System.out.print((char) 9);
+                System.out.print((char) 9); //This is a tab
             }
             System.out.println();
         }
@@ -132,10 +132,10 @@ public class RootJLab5b {
         System.out.println("Enter the size of your factorial table"); //We're using longs here to stave off the inevitable variable overflow
         long size = input.nextLong();
         long result;
-        for (long i = 0; i < size; i++) {
+        for (long i = 0; i < size; i++) { //Counts up
             result = i + 1;
             System.out.print((i+1) + "!= " + (i + 1));
-            for (long j = i; j > 0; j--) {
+            for (long j = i; j > 0; j--) { //Counts down and multiplies
                 System.out.print(" x " + j);
                 result *= j;
             }
@@ -146,12 +146,14 @@ public class RootJLab5b {
     private static void thousandprime() {
         System.out.print("How many primes do you want to find:    ");
         int numtofind = ensureint();
-        long[] primes = sieve(numtofind,Integer.MAX_VALUE-5);
-        int prime = 1;
+        long[] primes = sieve(numtofind,numtofind); //tends to have somewhat efficent results
+        System.out.print("Enter the nth prime you want to find (0 to quit):   ");
+        int prime = ensureint();
         do {
-            System.out.print("Enter the nth prime that you want to find, 0 to quit:  ");
-            prime = ensureint();
             System.out.println("Your prime is:  " + primes[prime-1]);
+            System.out.print("Enter the nth prime you want to find (0 to quit):   ");
+            prime = ensureint();
+            
 
         } while (prime != 0);
 
@@ -166,7 +168,7 @@ public class RootJLab5b {
 
 
         do {
-            boolean[] primes = new boolean[framesize];
+            boolean[] primes = new boolean[framesize]; //Boolean for marking primes
             for (int i = 0; i < framesize; i++) {
                 primes[i] = true;
             }
