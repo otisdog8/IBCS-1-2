@@ -1,3 +1,8 @@
+//********************************
+//*     Made By Jacob Root       *
+//*                              *
+//********************************
+
 import java.util.Comparator;
 import java.util.Scanner;
 import java.io.File;
@@ -9,7 +14,7 @@ public class RootJLab7 {
 
     public static void main(String[] args) {
         int response;
-        String[] items = { "End Program", "Counting", "Sorting" }; // Menu
+        String[] items = { "End Program", "Search", "Delete", "Add", "Name Sort", "ID Sort", "Print", "Save to File", "Read in new class", "Statistics"}; // Menu
                                                                    // code
         String menu = makemenu(items);
 
@@ -67,34 +72,8 @@ public class RootJLab7 {
         }
     }
 
-    private static void sort() {
-        int length = getfilelength("classlist.txt");
-        int maxim = 0;
-        String[][] strings = new String[length][5];
-        Student[] students;
-        Student[] studentsbystudentid;
-        Student[] studentsbylastname;
+    private static void sortbyid() {
 
-        Scanner scanner = generatescanner("classlist.txt");
-
-        for (int i = 0; i < length; i++) {
-            strings[i] = scanner.nextLine().split(" ");
-        }
-
-        students = tostudentarray(strings);
-
-        for (int i = 0; i < students.length; i++) {
-            maxim = Math.max(students[i].lastname.length(), maxim);
-        }
-
-        LastNameComparator lastnametester = new LastNameComparator(maxim);
-        StudentIDComparator studentIDcheck = new StudentIDComparator();
-
-        studentsbystudentid = bubblesort(students, studentIDcheck);
-        studentsbylastname = bubblesort(students, lastnametester);
-
-        generatefile(studentsbylastname, "studentLastNamED.txt");
-        generatefile(studentsbystudentid, "studentIDed.txt");
     }
 
     private static Student[] bubblesort(Student[] array, Comparator comparator) {
