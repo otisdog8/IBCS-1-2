@@ -15,7 +15,7 @@ class Student {
         this.data = data;
     }
 
-    public copy() {
+    public Student copy() {
         return new Student(this.data);
     }
 }

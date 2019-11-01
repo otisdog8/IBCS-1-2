@@ -9,8 +9,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.*;
 
-public class RootJLab7 {
+
+public class RootJLab7b {
     static Scanner input = new Scanner(System.in); // Makes it so that everyone can use this Scanner
+    static Classroom classroom = new Classroom("classlist.txt");
+
 
     public static void main(String[] args) {
         int response;
@@ -21,16 +24,107 @@ public class RootJLab7 {
         do {
             System.out.println(menu);
             response = ensureint();
-            if (response == 1) {
-                counting(); // Runs the specified program
-            } else if (response == 2) {
-                sort();
-            } else {
+            switch (response) {
+                case 1:
+                    search();
+                    break;
+                case 2:
+                    delete();
+                    break;
+                case 3:
+                    add();
+                    break;
+                case 4:
+                    namesort();
+                    break;
+                case 5:
+                    IDsort();
+                    break;
+                case 6:
+                    print();
+                    break;
+                case 7:
+                    save();
+                    break;
+                case 8:
+                    readinnew();
+                    break;
+                case 9:
+                    statistics();
+                    break;
             }
 
         } while (response != 0);
 
         System.out.println("Bye!");
+    }
+
+    private static Student search() {
+        System.out.print("Enter a student ID or name");;
+        if (input.hasNextInt()) {
+            return classroom.search(input.nextInt());
+        }
+        else {
+            return classroom.search(input.nextLine());
+        }
+    }
+
+    private static void delete() {
+        Student studenttodelete = search();
+        
+        System.out.print("Do you really want to delete " + studenttodelete.firstname + " " + studenttodelete.lastname + " " + studenttodelete.studentnum + "(y/n)?   ");
+        String result = input.nextLine();
+
+        if (result == "y") {
+            classroom.delete(studenttodelete);
+        }
+    }
+
+    private static void add() {
+        String[] data = new String[5];
+        String[] queries = {"student ID", "grade", "last name", "first name", "gender"};
+        for (int i = 0; i < 5; i++) {
+            System.out.print("Enter the " + queries[i] + ":   ");
+            data[i] = input.nextLine();
+        }
+        classroom.add(data);
+    }
+
+    private static void namesort() {
+        classroom.sortbyname();
+        System.out.println("done");
+    }
+
+    private static void IDsort() {
+        classroom.sortbyid();
+        System.out.println("done");
+    }
+
+    private static void print() {
+        System.out.println(classroom.generatestring());
+    }
+
+    private static void save() {
+        System.out.print("Enter the filename you wish to save as:   ");
+        String filename = input.nextLine();
+        classroom.generatefile(filename);
+    }
+
+    private static void readinnew() {
+        System.out.print("Enter the filename you wish to read as:   ");
+        String filename = input.nextLine();
+        File existtest = new File(filename);
+        if (existtest.exists()) {
+            classroom = new Classroom(filename);
+        }
+        else {
+            readinnew();
+        }
+
+    }
+    
+    private static void statistics() {
+
     }
 
     private static String makemenu(String[] items) { // Function generates a menu string so that I don't have to type it
@@ -46,124 +140,6 @@ public class RootJLab7 {
         return result;
     }
 
-    private static void counting() {
-        Scanner scanner = generatescanner("classlist.txt");
-        String line;
-        String[] lineparts;
-        int[] grades = new int[4];
-        int[] genders = new int[2];
-        int[] lastnames = new int[26];
-
-        while (scanner.hasNextLine()) {
-            lineparts = scanner.nextLine().split(" ");
-            grades[Integer.parseInt(lineparts[1]) - 9]++; // Adds one to the appropriate array
-            genders[((int) lineparts[4].toCharArray()[0] - (int) 'F') / ((int) 'M' - (int) 'F')]++;
-            lastnames[(int) lineparts[2].toCharArray()[0] - (int) 'A']++;
-        }
-
-        System.out.println("Freshmen:  " + grades[0]);
-        System.out.println("Sophomores:  " + grades[1]);
-        System.out.println("Juniors:  " + grades[2]);
-        System.out.println("Seniors:  " + grades[3]);
-        System.out.println("Males:  " + genders[0]);
-        System.out.println("Females:  " + genders[1]);
-        for (int i = 0; i < 26; i++) {
-            System.out.println((char) (i + (int) 'A') + ":  " + lastnames[i]);
-        }
-    }
-
-    private static void sortbyid() {
-
-    }
-
-    private static Student[] bubblesort(Student[] array, Comparator comparator) {
-        Student[] newarray = copyarray(array);
-        Student swap; // Swap Assistant
-        boolean sorted;
-
-        do {
-            sorted = true;
-            for (int i = 0; i < newarray.length - 1; i++) {
-
-                if (comparatortoboolean(comparator.compare(newarray[i], newarray[i + 1]))) {
-                    swap = newarray[i];
-                    newarray[i] = newarray[i + 1];
-                    newarray[i + 1] = swap;
-                    sorted = false;
-                }
-            }
-        } while (!sorted);
-
-        return newarray;
-    }
-
-    private static Student[] tostudentarray(String[][] array) {
-        Student[] newarray = new Student[array.length];
-
-        for (int i = 0; i < array.length; i++) {
-            newarray[i] = new Student(array[i]);
-        }
-
-        return newarray;
-    }
-
-    private static void generatefile(Student[] array, String filename) {
-        String str = "";
-        for (int i = 0; i < array.length; i++) {
-            for (int j = 0; j < 5; j++) {
-                str += array[i].data[j] + " ";
-            }
-            str += "\n";
-        }
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
-            writer.write(str);
-            writer.close();
-        } catch (IOException e) {
-            System.out.print("Caught an error\n");
-        }
-
-    }
-
-    private static Scanner generatescanner(String filename) {
-        File file = new File(filename);
-
-        try {
-            return new Scanner(file);
-        } catch (FileNotFoundException e) {
-            System.out.print("File not found\n");
-            return new Scanner(System.in);
-        }
-
-    }
-
-    private static boolean comparatortoboolean(int result) {
-        if (result > 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    private static Student[] copyarray(Student[] array) {
-        Student[] newarray = new Student[array.length];
-        for (int i = 0; i < array.length; i++) {
-            newarray[i] = array[i];
-        }
-        return newarray;
-    }
-
-    private static int getfilelength(String filename) {
-        Scanner scanner = generatescanner(filename);
-        int result = 0;
-
-        while (scanner.hasNextLine()) {
-            result++;
-            scanner.nextLine();
-        }
-
-        return result;
-    }
 
     private static int ensureint() {
         boolean isint = false;
@@ -181,73 +157,4 @@ public class RootJLab7 {
 
         return result;
     }
-}
-
-class Student {
-    int studentnum;
-    int grade;
-    String lastname;
-    String firstname;
-    String gender;
-    String[] data;
-
-    public Student(String[] data) {
-        this.studentnum = Integer.parseInt(data[0]);
-        this.grade = Integer.parseInt(data[1]);
-        this.lastname = data[2];
-        this.firstname = data[3];
-        this.gender = data[4];
-        this.data = data;
-    }
-}
-
-class LastNameComparator implements Comparator<Student> {
-    int padding;
-
-    LastNameComparator(int padding) {
-        this.padding = padding;
-    }
-
-    public int compare(Student o1, Student o2) {
-        return comparestrings(o1.lastname, o2.lastname, this.padding);
-    }
-
-    private static String padstring(String string, int padding, char padchar) {
-        if (string.length() < padding) {
-            for (int i = 0; i < padding - string.length() + 1; i++) {
-                string += padchar;
-            }
-        }
-        return string;
-    }
-
-    private static int comparestrings(String check1, String check2, int padding) {
-        check1 = padstring(check1, padding, 'a').toLowerCase();
-        check2 = padstring(check2, padding, 'a').toLowerCase();
-
-        // recursively calculate which string is bigger
-        return checkstring(check1, check2, 0);
-    }
-
-    private static int checkstring(String check1, String check2, int index) {
-        if ((int) check1.charAt(index) > (int) check2.charAt(index)) {
-            return 1;
-        } else if ((int) check1.charAt(index) < (int) check2.charAt(index)) {
-            return -1;
-        } else {
-            index++;
-            if (index > check1.length() - 1) {
-                return 0;
-            }
-            return checkstring(check1, check2, index);
-        }
-
-    }
-}
-
-class StudentIDComparator implements Comparator<Student> {
-    public int compare(Student o1, Student o2) {
-        return (int) Math.signum(o1.studentnum - o2.studentnum);
-    }
-
 }

@@ -1,8 +1,11 @@
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.util.Comparator;
 import java.util.Scanner;
+
 
 class Classroom {
     Student[] students;
@@ -36,7 +39,8 @@ class Classroom {
                 return this.students[i];
             }
         }
-        throw new NoSuchFieldException("This student doesn't exist");
+        String[] genericstudent = {"1","1","","",""};
+        return new Student(genericstudent);
     }
 
     public void delete(String[] student) {
@@ -69,7 +73,7 @@ class Classroom {
         this.filelength++;
         Student[] newstudents = new Student[this.filelength];
 
-        for (int i = 0; i < this.filelength - 1; i++ {
+        for (int i = 0; i < this.filelength - 1; i++) {
             newstudents[i] = students[i];
         }
 
@@ -77,7 +81,7 @@ class Classroom {
         this.students = newstudents;
     }
 
-    public void sortbyid(int id) {
+    public void sortbyid() {
         Comparator comparator = new StudentIDComparator();
 
         sort(comparator);
@@ -160,22 +164,27 @@ class Classroom {
         }
     }
 
-    private void generatefile(String filename) {
-        String str = "";
-        for (int i = 0; i < array.length; i++) {
-            for (int j = 0; j < 5; j++) {
-                str += this.students[i].data[j] + " ";
-            }
-            str += "\n";
-        }
+    public void generatefile(String filename) {
+        String str = generatestring();
         try {
-            BufferedWriter writer = BufferedWriter(new FileWriter(filename));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
             writer.write(str);
             writer.close();
         } catch (IOException e) {
             System.out.print("Caught an error\n");
         }
 
+    }
+
+    public String generatestring() {
+        String str = "";
+        for (int i = 0; i < this.students.length; i++) {
+            for (int j = 0; j < 5; j++) {
+                str += this.students[i].data[j] + " ";
+            }
+            str += "\n";
+        }
+        return str;
     }
 
     private int getfilelength() {
@@ -191,9 +200,14 @@ class Classroom {
     }
 
     private Scanner generatescanner() {
-        File file = new File(this.filename);
+        File file = new File(this.sourcefilename);
 
-        return new Scanner(file);
+        try {
+            return new Scanner(file);
+        } catch (FileNotFoundException e) {
+            System.out.print("File not found\n");
+            return new Scanner(System.in);
+        }
     }
 
 }
