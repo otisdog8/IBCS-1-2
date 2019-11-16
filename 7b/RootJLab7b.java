@@ -60,9 +60,11 @@ public class RootJLab7b {
     }
 
     private static Student search() {
-        System.out.print("Enter a student ID or name");;
+        System.out.print("Enter a student ID or name:   ");
         if (input.hasNextInt()) {
-            return classroom.search(input.nextInt());
+            Student retval = classroom.search(input.nextInt());;
+            input.nextLine();
+            return retval;
         }
         else {
             return classroom.search(input.nextLine());
@@ -81,6 +83,7 @@ public class RootJLab7b {
     }
 
     private static void add() {
+        input.nextLine();
         String[] data = new String[5];
         String[] queries = {"student ID", "grade", "last name", "first name", "gender"};
         for (int i = 0; i < 5; i++) {
@@ -154,7 +157,6 @@ public class RootJLab7b {
                 System.out.print("Please enter an int\n");
             }
         }
-
         return result;
     }
 }
