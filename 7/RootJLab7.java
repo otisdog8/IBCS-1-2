@@ -1,33 +1,61 @@
-import java.util.Comparator;
+//********************************
+//*     Made By Jacob Root       *
+//*                              *
+//********************************
+
 import java.util.Scanner;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.*;
 
 public class RootJLab7 {
-    static Scanner input = new Scanner(System.in); // Makes it so that everyone can use this Scanner
+   static Scanner input = new Scanner(System.in); //Makes it so that everyone can use this Scanner
 
     public static void main(String[] args) {
+        System.out.print("How many primes do you want to find:   ");
+        int num_to_find = ensureint();
+        int index1;
+        int index2;
+        
+        long[] primearray = new long[num_to_find];
         int response;
-        String[] items = { "End Program", "Counting", "Sorting" }; // Menu
-                                                                   // code
+        
+
+        primearray = fillprimearray(primearray,num_to_find);
+
+        if (yesno("Do you want to display the primes as a table")) {
+            displaytable(primearray);
+        }
+        String[] items = { "End Program", "Get Prime", "Display Range", "Factors", "Display Table",
+                "Rebuild Prime Array" }; // Menu code
         String menu = makemenu(items);
 
         do {
             System.out.println(menu);
             response = ensureint();
-            if (response == 1) {
-                counting(); // Runs the specified program
-            } else if (response == 2) {
-                sort();
-            } else {
+            switch (response) {
+            case 1:
+                horizontaltabs();
+                break;
+            case 2:
+                numbergame();
+                break;
+            case 3:
+                rectangle();
+                break;
+            case 4:
+                factorials();
+                break;
+            case 5:
+                thousandprime();
+                break;
+            default:
+                break;
             }
 
         } while (response != 0);
 
         System.out.println("Bye!");
+    
     }
-
+    
     private static String makemenu(String[] items) { // Function generates a menu string so that I don't have to type it
                                                      // out.
         String result = "";
@@ -40,150 +68,43 @@ public class RootJLab7 {
 
         return result;
     }
-
-    private static void counting() {
-        Scanner scanner = generatescanner("classlist.txt");
-        String line;
-        String[] lineparts;
-        int[] grades = new int[4];
-        int[] genders = new int[2];
-        int[] lastnames = new int[26];
-
-        while (scanner.hasNextLine()) {
-            lineparts = scanner.nextLine().split(" ");
-            grades[Integer.parseInt(lineparts[1]) - 9]++; // Adds one to the appropriate array
-            genders[((int) lineparts[4].toCharArray()[0] - (int) 'F') / ((int) 'M' - (int) 'F')]++;
-            lastnames[(int) lineparts[2].toCharArray()[0] - (int) 'A']++;
-        }
-
-        System.out.println("Freshmen:  " + grades[0]);
-        System.out.println("Sophomores:  " + grades[1]);
-        System.out.println("Juniors:  " + grades[2]);
-        System.out.println("Seniors:  " + grades[3]);
-        System.out.println("Males:  " + genders[0]);
-        System.out.println("Females:  " + genders[1]);
-        for (int i = 0; i < 26; i++) {
-            System.out.println((char) (i + (int) 'A') + ":  " + lastnames[i]);
-        }
-    }
-
-    private static void sort() {
-        int length = getfilelength("classlist.txt");
-        int maxim = 0;
-        String[][] strings = new String[length][5];
-        Student[] students;
-        Student[] studentsbystudentid;
-        Student[] studentsbylastname;
-
-        Scanner scanner = generatescanner("classlist.txt");
-
-        for (int i = 0; i < length; i++) {
-            strings[i] = scanner.nextLine().split(" ");
-        }
-
-        students = tostudentarray(strings);
-
-        for (int i = 0; i < students.length; i++) {
-            maxim = Math.max(students[i].lastname.length(), maxim);
-        }
-
-        LastNameComparator lastnametester = new LastNameComparator(maxim);
-        StudentIDComparator studentIDcheck = new StudentIDComparator();
-
-        studentsbystudentid = bubblesort(students, studentIDcheck);
-        studentsbylastname = bubblesort(students, lastnametester);
-
-        generatefile(studentsbylastname, "studentLastNamED.txt");
-        generatefile(studentsbystudentid, "studentIDed.txt");
-    }
-
-    private static Student[] bubblesort(Student[] array, Comparator comparator) {
-        Student[] newarray = copyarray(array);
-        Student swap; // Swap Assistant
-        boolean sorted;
-
         do {
-            sorted = true;
-            for (int i = 0; i < newarray.length - 1; i++) {
-
-                if (comparatortoboolean(comparator.compare(newarray[i], newarray[i + 1]))) {
-                    swap = newarray[i];
-                    newarray[i] = newarray[i + 1];
-                    newarray[i + 1] = swap;
-                    sorted = false;
+            System.out.print("\n Enter the prime number you would like to find (-1 to quit):   ");
+            try {
+                response = input.nextLine();
+                index1 = Integer.parseInt(response.split(" ")[0]);
+                if (response.contains(" ")) {
+                    index2 = Integer.parseInt(response.split(" ")[1]);
+                    displayprimes(primearray, index1, index2);
+                }
+                else  if (index1 != -1) {
+                    displayprime(primearray, index1);
                 }
             }
-        } while (!sorted);
-
-        return newarray;
-    }
-
-    private static Student[] tostudentarray(String[][] array) {
-        Student[] newarray = new Student[array.length];
-
-        for (int i = 0; i < array.length; i++) {
-            newarray[i] = new Student(array[i]);
-        }
-
-        return newarray;
-    }
-
-    private static void generatefile(Student[] array, String filename) {
-        String str = "";
-        for (int i = 0; i < array.length; i++) {
-            for (int j = 0; j < 5; j++) {
-                str += array[i].data[j] + " ";
+            catch (NumberFormatException e) {
+                index1 = 0;
+                System.out.print("You need to enter valid integers");
             }
-            str += "\n";
-        }
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
-            writer.write(str);
-            writer.close();
-        } catch (IOException e) {
-            System.out.print("Caught an error\n");
-        }
-
+        } while (index1 != -1);
     }
 
-    private static Scanner generatescanner(String filename) {
-        File file = new File(filename);
-
-        try {
-            return new Scanner(file);
-        } catch (FileNotFoundException e) {
-            System.out.print("File not found\n");
-            return new Scanner(System.in);
-        }
-
+    private static void displayprime(long[] array, int prime) {
+        System.out.print("\nFound prime number:  " + array[prime-1]);
     }
 
-    private static boolean comparatortoboolean(int result) {
-        if (result > 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    private static void displayprimes(long[] array, int prime1, int prime2) {
+        int placehold = prime1;
+        prime1 = Math.min(prime2,prime1);
+        prime2 = Math.max(prime2,placehold);
 
-    private static Student[] copyarray(Student[] array) {
-        Student[] newarray = new Student[array.length];
+
         for (int i = 0; i < array.length; i++) {
-            newarray[i] = array[i];
+            if (array[i] <= prime2) { //Split up to slightly increase performance
+                if (array[i] >= prime1) {
+                    System.out.print("\nFound prime number:  " + array[i]);
+                }
+            }
         }
-        return newarray;
-    }
-
-    private static int getfilelength(String filename) {
-        Scanner scanner = generatescanner(filename);
-        int result = 0;
-
-        while (scanner.hasNextLine()) {
-            result++;
-            scanner.nextLine();
-        }
-
-        return result;
     }
 
     private static int ensureint() {
@@ -193,8 +114,10 @@ public class RootJLab7 {
         while (!isint) {
             if (input.hasNextInt()) {
                 result = input.nextInt();
+                input.nextLine(); //Consume \n
                 isint = true;
-            } else {
+            }
+            else {
                 input.nextLine();
                 System.out.print("Please enter an int\n");
             }
@@ -202,73 +125,93 @@ public class RootJLab7 {
 
         return result;
     }
-}
 
-class Student {
-    int studentnum;
-    int grade;
-    String lastname;
-    String firstname;
-    String gender;
-    String[] data;
+    private static boolean yesno(String query) {        
+        query += "? (y/n)";
+        
+        do {
+            System.out.println(query);
 
-    public Student(String[] data) {
-        this.studentnum = Integer.parseInt(data[0]);
-        this.grade = Integer.parseInt(data[1]);
-        this.lastname = data[2];
-        this.firstname = data[3];
-        this.gender = data[4];
-        this.data = data;
-    }
-}
-
-class LastNameComparator implements Comparator<Student> {
-    int padding;
-
-    LastNameComparator(int padding) {
-        this.padding = padding;
-    }
-
-    public int compare(Student o1, Student o2) {
-        return comparestrings(o1.lastname, o2.lastname, this.padding);
-    }
-
-    private static String padstring(String string, int padding, char padchar) {
-        if (string.length() < padding) {
-            for (int i = 0; i < padding - string.length() + 1; i++) {
-                string += padchar;
+            if (input.nextLine() == "y") {
+                return true;
             }
-        }
-        return string;
-    }
-
-    private static int comparestrings(String check1, String check2, int padding) {
-        check1 = padstring(check1, padding, 'a').toLowerCase();
-        check2 = padstring(check2, padding, 'a').toLowerCase();
-
-        // recursively calculate which string is bigger
-        return checkstring(check1, check2, 0);
-    }
-
-    private static int checkstring(String check1, String check2, int index) {
-        if ((int) check1.charAt(index) > (int) check2.charAt(index)) {
-            return 1;
-        } else if ((int) check1.charAt(index) < (int) check2.charAt(index)) {
-            return -1;
-        } else {
-            index++;
-            if (index > check1.length() - 1) {
-                return 0;
+            else if (input.nextLine() == "n") {
+                return false;
             }
-            return checkstring(check1, check2, index);
-        }
-
-    }
-}
-
-class StudentIDComparator implements Comparator<Student> {
-    public int compare(Student o1, Student o2) {
-        return (int) Math.signum(o1.studentnum - o2.studentnum);
+            else {
+                System.out.println("Please put y or n");
+            }
+        } while (true);
     }
 
+    private static void displaytable(long[] array) {
+
+    }
+
+    private static long[] fillprimearray(long[] primearray) {// Put here to fufill lab requirements
+        return fillprimearray(primearray, 1000); 
+    }
+
+    private static long[] fillprimearray(long[] primearray, int num_to_find) {
+        primearray = sieve(num_to_find, num_to_find); // Max value 2147483645
+        return primearray;
+    }
+    
+
+
+    private static long[] sieve(int numofprimes,int framesize) {
+        long offset = +2;
+        int numfound = 0;
+        boolean primefound = false;
+        long[] results = new long[numofprimes];
+        long firstvalue;
+        boolean[] primes = new boolean[framesize];
+        long prime;
+
+        do {
+            for (int i = 0; i < framesize; i++) {
+                primes[i] = true;
+            }
+            
+            for (int index = 0; index < numfound; index++) {
+                prime = results[index];
+                firstvalue = (offset / prime) * prime - offset;
+                if (firstvalue < 0L) {
+                    firstvalue += prime;
+                }
+                firstvalue += offset;
+
+                for (long i = firstvalue; i < framesize + offset; i += prime) {
+                        primes[(int) (i-offset)] = false;
+                }
+
+                
+            }
+
+            for (int index = 0; index < framesize; index++) {
+                if (primes[index] == true) {
+                    prime = index + offset;
+
+                    for (long i = prime; i < framesize + offset; i += prime) {
+                        primes[(int) (i-offset)] = false;
+                    }
+                    
+                    results[numfound] = (long) prime;
+                    numfound++;
+                    if (numfound == numofprimes) {
+                        primefound = true;
+                        break;
+
+                    }
+                }
+            }
+
+
+            offset += framesize;
+
+            
+        } while (!primefound);
+
+        return results;
+    }
 }
