@@ -3,6 +3,12 @@
 //*                              *
 //********************************
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Scanner;
 
 public class RootJLab7 {
@@ -15,7 +21,7 @@ public class RootJLab7 {
         primearray = rebuildarray();
 
         String[] items = { "End Program", "Get Prime", "Display Range", "Factors", "Display Table",
-                "Rebuild Prime Array" }; // Menu code
+                "Save Primes To File", "Load primes From File", "Rebuild Prime Array" }; // Menu code
         String menu = makemenu(items);
 
         do {
@@ -32,9 +38,15 @@ public class RootJLab7 {
                 factors(primearray);
                 break;
             case 4:
-                displaytable(primearray);
+                displaytable(new LongArrayPlusPlus(primearray));
                 break;
             case 5:
+                savefile(primearray);
+                break;
+            case 6:
+                primearray = loadfile();
+                break;
+            case 7:
                 primearray = rebuildarray();
                 break;
             default:
@@ -72,6 +84,8 @@ public class RootJLab7 {
     }
 
     private static void displayprimes(long[] array, int prime1, int prime2) {
+        LongArrayPlusPlus displayvals = new LongArrayPlusPlus();
+
         int placehold = prime1;
         prime1 = Math.min(prime2, prime1);
         prime2 = Math.max(prime2, placehold);
@@ -79,10 +93,11 @@ public class RootJLab7 {
         for (int i = 0; i < array.length; i++) {
             if (array[i] <= prime2) { // Split up to slightly increase performance
                 if (array[i] >= prime1) {
-                    System.out.print("\nFound prime number:  " + array[i]);
+                    displayvals.add(array[i]);
                 }
             }
         }
+        displaytable(displayvals);
         System.out.println();
     }
 
@@ -109,6 +124,36 @@ public class RootJLab7 {
             factornum = ensurelong();
 
         } while (factornum != 0);
+    }
+
+    private static void savefile(long[] primes) {
+        // String filename = input.nextLine();
+        try {
+            ObjectOutputStream filewriter = new ObjectOutputStream(new FileOutputStream("primes.jobj"));
+            filewriter.writeObject(primes);
+            filewriter.close();
+        } catch (IOException e) {
+
+        } finally {
+
+        }
+    }
+
+    private static long[] loadfile() {
+        long[] primearray = new long[0];
+        try {
+            ObjectInputStream filereader = new ObjectInputStream(new FileInputStream("primes.jobj"));
+
+            primearray = (long[]) filereader.readObject();
+
+            filereader.close();
+        } catch (IOException e) {
+
+        } catch (ClassNotFoundException e) {
+
+        }
+        return primearray;
+
     }
 
     private static int ensureint() {
@@ -163,7 +208,57 @@ public class RootJLab7 {
         } while (true);
     }
 
-    private static void displaytable(long[] array) {
+    private static void displaytable(LongArrayPlusPlus array) {
+        int linelength = 19;
+        int columnlength = 10;
+        int numlines = (int) Math.ceil(array.length / (double) linelength);
+        int numcolumns;
+        int numlength;
+        String indexstring;
+
+        System.out.println();
+        for (int i = 0; i < numlines; i++) {
+            System.out.println();
+            // Print indexes
+            for (int j = 0; j < linelength; j++) {
+                indexstring = Integer.toString(j + 1 + i * linelength);
+                switch (j + 1 + i * linelength % columnlength) {
+                case 1:
+                    indexstring += "st";
+                    break;
+                case 2:
+                    indexstring += "nd";
+                    break;
+                case 3:
+                    indexstring += "rd";
+                    break;
+                default:
+                    indexstring += "th";
+                    break;
+                }
+                numlength = indexstring.length();
+                System.out.print(indexstring);
+                for (int k = 0; k < columnlength - numlength; k++) {
+                    System.out.print(" ");
+                }
+            }
+            System.out.println();
+            // Print primes
+            if (i == numlines - 1) {
+                // Limited number of table displays
+                numcolumns = array.length - i * linelength;
+            } else {
+                numcolumns = linelength;
+            }
+            for (int j = 0; j < numcolumns; j++) {
+                numlength = (int) Math.floor(Math.log10(array.get(i * linelength + j))) + 1;
+                System.out.print(array.get(i * linelength + j));
+                for (int k = 0; k < columnlength - numlength; k++) {
+                    System.out.print(" ");
+                }
+            }
+            System.out.println();
+        }
 
     }
 
@@ -331,6 +426,25 @@ class LongArrayPlusPlus {
 
         this.internalarray = newarray;
         this.length--;
+    }
+
+    public long pop(int index) {
+        long[] newarray = new long[internalarray.length - 1];
+        int offset = 0;
+        long retval = internalarray[index];
+
+        for (int i = 0; i < internalarray.length; i++) {
+            if (i == index) {
+                offset++;
+            } else {
+                newarray[i - offset] = internalarray[i];
+            }
+        }
+
+        this.internalarray = newarray;
+        this.length--;
+
+        return retval;
     }
 
     public long get(int index) {
