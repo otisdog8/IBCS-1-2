@@ -25,7 +25,7 @@ public class RootJLab7 {
 
     RootJLab7() {
         this.input = new Scanner(System.in);
-        this.primearray = rebuildarray();
+        this.primearray = buildarray();
     }
 
     public void run() {
@@ -85,7 +85,11 @@ public class RootJLab7 {
         return result;
     }
 
-    private long[] rebuildarray() {
+    private void rebuildarray() {
+        primearray = buildarray();
+    }
+
+    private long[] buildarray() {
         System.out.print("How many primes do you want to find:   ");
         int num_to_find = ensureint();
         return fillprimearray(primearray, num_to_find);
@@ -165,10 +169,12 @@ public class RootJLab7 {
                 indexstring = Integer.toString(index);
                 // But not 11, 12, or 13 because they are SPECIAL
                 if (index % 100 - index % 10 == 10) {
+                    // If 10s place is 1
                     // 11th, 12th, 13th
                     indexstring += "th";
                 } else {
                     switch ((index) % 10) {
+                    // Gets ones place
                     case 1:
                         indexstring += "st";
                         break;
