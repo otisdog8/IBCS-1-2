@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
-public class RootJLab6b {
+public class RootJLab9 {
     static Scanner input = new Scanner(System.in); // Makes it so that everyone can use this Scanner
     static Random rand = new Random(); // Makes it so everyone can use this Random
 
