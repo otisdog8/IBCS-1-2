@@ -427,7 +427,7 @@ public class RootJLab7 {
 }
 
 class LongArrayPlusPlus {
-    // Not using generic typing because Objects use ~2.5x more memory than longs
+    // Not using generic typing because Objects use more memory than longs
     long[] internalarray;
     int length;
 

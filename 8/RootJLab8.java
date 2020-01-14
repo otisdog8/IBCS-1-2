@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.*;
 
-public class RootJLab7 {
+public class RootJLab8 {
     static Scanner input = new Scanner(System.in); // Makes it so that everyone can use this Scanner
 
     public static void main(String[] args) {
@@ -43,7 +43,6 @@ public class RootJLab7 {
 
     private static void counting() {
         Scanner scanner = generatescanner("classlist.txt");
-        String line;
         String[] lineparts;
         int[] grades = new int[4];
         int[] genders = new int[2];
@@ -51,9 +50,9 @@ public class RootJLab7 {
 
         while (scanner.hasNextLine()) {
             lineparts = scanner.nextLine().split(" ");
-            grades[Integer.parseInt(lineparts[1]) - 9]++; // Adds one to the appropriate array
-            genders[((int) lineparts[4].toCharArray()[0] - (int) 'F') / ((int) 'M' - (int) 'F')]++;
-            lastnames[(int) lineparts[2].toCharArray()[0] - (int) 'A']++;
+            grades[Integer.parseInt(lineparts[1]) - 9]++; // Adds one to the appropriate array by subtracting 9 from the grade level
+            genders[((int) lineparts[4].toCharArray()[0] - (int) 'F') / ((int) 'M' - (int) 'F')]++; // Uses char arithmetic to assign an 'F' to 1 and an 'M' to 0
+            lastnames[(int) lineparts[2].toCharArray()[0] - (int) 'A']++; //Subtracts 'A' to index lastnames.
         }
 
         System.out.println("Freshmen:  " + grades[0]);
@@ -69,7 +68,7 @@ public class RootJLab7 {
 
     private static void sort() {
         int length = getfilelength("classlist.txt");
-        int maxim = 0;
+        int maxim = 0; //Maximum length of a last name
         String[][] strings = new String[length][5];
         Student[] students;
         Student[] studentsbystudentid;
@@ -87,6 +86,8 @@ public class RootJLab7 {
             maxim = Math.max(students[i].lastname.length(), maxim);
         }
 
+
+        // Instead of making two bubblesorts, we use comparators
         LastNameComparator lastnametester = new LastNameComparator(maxim);
         StudentIDComparator studentIDcheck = new StudentIDComparator();
 
@@ -243,6 +244,7 @@ class LastNameComparator implements Comparator<Student> {
     }
 
     private static int comparestrings(String check1, String check2, int padding) {
+        // We need padding because otherwise the checker will fail
         check1 = padstring(check1, padding, 'a').toLowerCase();
         check2 = padstring(check2, padding, 'a').toLowerCase();
 

@@ -30,14 +30,16 @@ class Classroom {
     }
 
     public Student search(int id) {
-        return search(1, Integer.toString(id));
+        return search(0, Integer.toString(id));
     }
 
     private Student search(int field, String data) {
         for (int i = 0; i < this.filelength; i++) {
-            if (this.students[i].data[field] == data) {
+
+            if (this.students[i].data[field].equals(data)) {
                 return this.students[i];
             }
+
         }
         String[] genericstudent = {"1","1","","",""};
         return new Student(genericstudent);
@@ -49,10 +51,11 @@ class Classroom {
 
     public void delete(Student student) {
         Student[] newstudents;
-        int offset = 0;
+        int offset;
         for (int i = 0; i < this.filelength; i++) {
-            if (student.data == this.students[i].data) {
+            if (student.studentnum == this.students[i].studentnum) {
                 this.filelength--;
+                offset = 0;
                 newstudents = new Student[this.filelength];
                 for (int j = 0; j < this.filelength; j++) {
                     if (j == i) {
@@ -206,7 +209,8 @@ class Classroom {
             return new Scanner(file);
         } catch (FileNotFoundException e) {
             System.out.print("File not found\n");
-            return new Scanner(System.in);
+            this.sourcefilename = "classlist.txt";
+            return generatescanner();
         }
     }
 

@@ -26,7 +26,7 @@ public class RootJLab7b {
             response = ensureint();
             switch (response) {
                 case 1:
-                    search();
+                    searchstudents();
                     break;
                 case 2:
                     delete();
@@ -59,16 +59,15 @@ public class RootJLab7b {
         System.out.println("Bye!");
     }
 
-    private static Student search() {
-        System.out.print("Enter a student ID or name:   ");
-        if (input.hasNextInt()) {
-            Student retval = classroom.search(input.nextInt());;
-            input.nextLine();
-            return retval;
+    private static void searchstudents() {
+        Student studenttodisplay = search();
+        if (studenttodisplay.studentnum == 1) {
+            System.out.println("You found nothing");
         }
         else {
-            return classroom.search(input.nextLine());
+            System.out.println("You found " + studenttodisplay.firstname + " " + studenttodisplay.lastname + " " + studenttodisplay.studentnum + ".   ");
         }
+
     }
 
     private static void delete() {
@@ -82,6 +81,18 @@ public class RootJLab7b {
         }
     }
 
+    private static Student search() {
+        System.out.print("Enter a student ID or name:   ");
+        if (input.hasNextInt()) {
+            Student retval = classroom.search(input.nextInt());;
+            input.nextLine();
+            return retval;
+        }
+        else {
+            return classroom.search(input.nextLine());
+        }
+    }
+    
     private static void add() {
         input.nextLine();
         String[] data = new String[5];
@@ -151,6 +162,7 @@ public class RootJLab7b {
         while (!isint) {
             if (input.hasNextInt()) {
                 result = input.nextInt();
+                input.nextLine();
                 isint = true;
             } else {
                 input.nextLine();
