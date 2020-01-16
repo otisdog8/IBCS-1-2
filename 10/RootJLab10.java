@@ -4,7 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
  
 public class RootJLab10 extends Application {
@@ -15,19 +15,40 @@ public class RootJLab10 extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Hello World!");
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
+        
+        Button java = new Button();
+        java.setText("Java");
+        java.setOnAction(new EventHandler<ActionEvent>() {
  
             @Override
             public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
+                System.out.println("Make Java Great Again!");
             }
         });
-        
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
-        primaryStage.setScene(new Scene(root, 300, 250));
+        java.setLayoutX(60);
+        java.setLayoutY(60);
+
+        Button onoff = new Button();
+        onoff.setText("On");
+        onoff.setOnAction(new EventHandler<ActionEvent>() {
+ 
+            @Override
+            public void handle(ActionEvent event) {
+                if (onoff.getText().equals("On")) {
+                    onoff.setText("Off");
+                } else if (onoff.getText().equals("Off")) {
+                    onoff.setText("On");
+                }
+            }
+        });
+        onoff.setLayoutX(60);
+        onoff.setLayoutY(120);
+
+        Pane root = new Pane();
+        root.getChildren().add(java);
+        root.getChildren().add(onoff);
+
+        primaryStage.setScene(new Scene(root, 300, 300));
         primaryStage.show();
     }
 }
