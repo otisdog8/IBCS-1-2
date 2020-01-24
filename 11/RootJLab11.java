@@ -23,9 +23,7 @@ public class RootJLab11 extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Color and Scale");   
 
-        Scale scale = new Scale();
-        scale.setX(1);
-        scale.setY(1);
+        Scale scale = new Scale(1,1);
 
         Circle fillInCircle = new Circle(35, 35, 20);
         Text text = new Text(55,50,"This is drawn on the canvas");
@@ -91,8 +89,6 @@ public class RootJLab11 extends Application {
 
         Pane buttonPane = new Pane();
         buttonPane.getChildren().addAll(scaleBtn, colorBtn);
-
-
 
         VBox root = new VBox();
         root.getChildren().addAll(objectPane,buttonPane);
