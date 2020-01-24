@@ -14,9 +14,13 @@ public class RootJLab10 extends Application {
     
     @Override
     public void start(Stage primaryStage) {
+        Button java;
+        Button onoff;
+        Pane root;
+
         primaryStage.setTitle("Hello World!");
         
-        Button java = new Button();
+        java = new Button();
         java.setText("Java");
         java.setOnAction(new EventHandler<ActionEvent>() {
  
@@ -28,7 +32,7 @@ public class RootJLab10 extends Application {
         java.setLayoutX(60);
         java.setLayoutY(60);
 
-        Button onoff = new Button();
+        onoff = new Button();
         onoff.setText("On");
         onoff.setOnAction(new EventHandler<ActionEvent>() {
  
@@ -44,7 +48,7 @@ public class RootJLab10 extends Application {
         onoff.setLayoutX(60);
         onoff.setLayoutY(120);
 
-        Pane root = new Pane();
+        root = new Pane();
         root.getChildren().add(java);
         root.getChildren().add(onoff);
 

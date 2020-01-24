@@ -21,26 +21,35 @@ public class RootJLab11 extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        Scale scale;
+        Circle fillInCircle, transparentCircle;
+        Text text;
+        Line line;
+        Rectangle transparentRectangle, fillInRectangle;
+        Pane objectPane, buttonPane;
+        Button scaleBtn, colorBtn;
+        VBox root;
+        
         primaryStage.setTitle("Color and Scale");   
 
-        Scale scale = new Scale(1,1);
+        scale = new Scale(1,1);
 
-        Circle fillInCircle = new Circle(35, 35, 20);
-        Text text = new Text(55,50,"This is drawn on the canvas");
-        Circle transparentCircle = new Circle(160,160,75);
+        fillInCircle = new Circle(35, 35, 20);
+        text = new Text(55,50,"This is drawn on the canvas");
+        transparentCircle = new Circle(160,160,75);
         transparentCircle.setFill(null);
         transparentCircle.setStroke(Color.BLACK);
-        Line line = new Line(5,5,150,150);
-        Rectangle transparentRectangle = new Rectangle(20, 160, 40, 160);
+        line = new Line(5,5,150,150);
+        transparentRectangle = new Rectangle(20, 160, 40, 160);
         transparentRectangle.setFill(null);
         transparentRectangle.setStroke(Color.BLACK);
-        Rectangle fillInRectangle = new Rectangle(85, 250, 225, 40);
+        fillInRectangle = new Rectangle(85, 250, 225, 40);
 
-        Pane objectPane = new Pane();
+        objectPane = new Pane();
         objectPane.getTransforms().add(scale);
         objectPane.getChildren().addAll(fillInCircle, text, transparentCircle, line, transparentRectangle, fillInRectangle);
 
-        Button scaleBtn = new Button("Scale");
+        scaleBtn = new Button("Scale");
         scaleBtn.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent event) {
@@ -56,7 +65,7 @@ public class RootJLab11 extends Application {
         scaleBtn.setLayoutX(100);
         scaleBtn.setLayoutY(0);
 
-        Button colorBtn = new Button("Color");
+        colorBtn = new Button("Color");
         colorBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -87,10 +96,10 @@ public class RootJLab11 extends Application {
         colorBtn.setLayoutX(200);
         colorBtn.setLayoutY(0);
 
-        Pane buttonPane = new Pane();
+        buttonPane = new Pane();
         buttonPane.getChildren().addAll(scaleBtn, colorBtn);
 
-        VBox root = new VBox();
+        root = new VBox();
         root.getChildren().addAll(objectPane,buttonPane);
 
         primaryStage.setScene(new Scene(root, 350, 350));
