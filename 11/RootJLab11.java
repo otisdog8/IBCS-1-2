@@ -27,12 +27,20 @@ public class RootJLab11 extends Application {
         scale.setX(1);
         scale.setY(1);
 
-        Circle circle = new Circle(35, 35, 20);
+        Circle fillInCircle = new Circle(35, 35, 20);
         Text text = new Text(55,50,"This is drawn on the canvas");
+        Circle transparentCircle = new Circle(160,160,75);
+        transparentCircle.setFill(null);
+        transparentCircle.setStroke(Color.BLACK);
+        Line line = new Line(5,5,150,150);
+        Rectangle transparentRectangle = new Rectangle(20, 160, 40, 160);
+        transparentRectangle.setFill(null);
+        transparentRectangle.setStroke(Color.BLACK);
+        Rectangle fillInRectangle = new Rectangle(85, 250, 225, 40);
 
         Pane objectPane = new Pane();
         objectPane.getTransforms().add(scale);
-        objectPane.getChildren().addAll(circle, text);
+        objectPane.getChildren().addAll(fillInCircle, text, transparentCircle, line, transparentRectangle, fillInRectangle);
 
         Button scaleBtn = new Button("Scale");
         scaleBtn.setOnAction(new EventHandler<ActionEvent>(){
@@ -69,7 +77,11 @@ public class RootJLab11 extends Application {
                 int size = objectPane.getChildren().size();
                 for (int i = 0; i < size; i++) {
                     Shape object = (Shape) objectPane.getChildren().get(i);
-                    object.setFill(currentcolor);
+                    if (object.getFill() == null) {
+                        object.setStroke(currentcolor);
+                    } else {
+                        object.setFill(currentcolor);
+                    }
                 }
             }
         });
@@ -85,7 +97,7 @@ public class RootJLab11 extends Application {
         VBox root = new VBox();
         root.getChildren().addAll(objectPane,buttonPane);
 
-        primaryStage.setScene(new Scene(root, 300, 300));
+        primaryStage.setScene(new Scene(root, 350, 350));
         primaryStage.show();
     }
 }
