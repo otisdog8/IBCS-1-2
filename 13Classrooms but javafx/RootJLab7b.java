@@ -12,7 +12,7 @@ import java.io.*;
 
 public class RootJLab7b {
     static Scanner input = new Scanner(System.in); // Makes it so that everyone can use this Scanner
-    static Classroom classroom = new Classroom("classlist.txt");
+    static Classroom classroom = new Classroom();
 
 
     public static void main(String[] args) {
@@ -76,7 +76,7 @@ public class RootJLab7b {
         System.out.print("Do you really want to delete " + studenttodelete.firstname + " " + studenttodelete.lastname + " " + studenttodelete.studentnum + "(y/n)?   ");
         String result = input.nextLine();
 
-        if (result == "y") {
+        if (result.equals("y")) {
             classroom.delete(studenttodelete);
         }
     }
@@ -94,7 +94,6 @@ public class RootJLab7b {
     }
     
     private static void add() {
-        input.nextLine();
         String[] data = new String[5];
         String[] queries = {"student ID", "grade", "last name", "first name", "gender"};
         for (int i = 0; i < 5; i++) {
@@ -129,7 +128,7 @@ public class RootJLab7b {
         String filename = input.nextLine();
         File existtest = new File(filename);
         if (existtest.exists()) {
-            classroom = new Classroom(filename);
+            classroom = new Classroom();
         }
         else {
             readinnew();

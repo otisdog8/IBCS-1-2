@@ -5,14 +5,60 @@ import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.util.Comparator;
 import java.util.Scanner;
-
+import java.io.ObjectInputStream;
+import javax.naming.NameAlreadyBoundException;
+import javax.naming.NameNotFoundException;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 
 class Classroom {
     Student[] students;
     String sourcefilename;
     int filelength;
 
-    Classroom(String filename) {
+    Classroom() {
+        
+        //try loading classroom.jobj
+        //if fail, load classlist.txt
+        if (!load("classroom.jobj")) {
+            load("classlist.txt");
+        }
+
+    }
+
+    public boolean load(String filename) {
+        if (filename.endsWith(".jobj")) {
+            return loadJobj(filename);
+        } else if (filename.endsWith(".txt")) {
+            loadText(filename);
+        } else { //Try loading strings regardless
+            loadText(filename);
+        }
+        return false;
+    }
+
+    private boolean loadJobj(String filename) {
+        try {
+            ObjectInputStream filereader = new ObjectInputStream(new FileInputStream(filename));
+
+            this.students = (Student[]) filereader.readObject();
+            // Reads the array of students from a file
+            filereader.close();
+
+            return true;
+        } catch (IOException e) {
+
+        } catch (ClassNotFoundException e) {
+            // Make sure to catch these and do nothing
+        } catch (ClassCastException e) {
+        
+        }
+        return false;
+
+    }
+
+    private void loadText(String filename) {
         this.sourcefilename = filename;
         int filelength = getfilelength();
         this.filelength = filelength;
@@ -23,26 +69,44 @@ class Classroom {
         for (int i = 0; i < filelength; i++) {
             this.students[i] = new Student(filescanner.nextLine().split(" "));
         }
+        savefile();
     }
 
     public Student search(String name) {
-        return search(2, name);
+        // Searches first by last name, than first name, than returns the generic
+        try {
+            return search(2, name);
+        } catch (NameNotFoundException e0) {
+            try {
+                return search(3, name);
+            } catch (NameNotFoundException e1) {
+                return new Student();
+            }
+        }
     }
 
     public Student search(int id) {
-        return search(0, Integer.toString(id));
+        try {
+            return search(0, Integer.toString(id));
+        } catch (NameNotFoundException e) {
+            return new Student();
+        }
     }
 
-    private Student search(int field, String data) {
+    private Student search(int field, String data) throws NameNotFoundException{
+        Student result = null;
+        
         for (int i = 0; i < this.filelength; i++) {
-
             if (this.students[i].data[field].equals(data)) {
-                return this.students[i];
+                result = this.students[i];
             }
-
         }
-        String[] genericstudent = {"1","1","","",""};
-        return new Student(genericstudent);
+
+        if (result == null) {
+            throw new NameNotFoundException();
+        }
+
+        return result;
     }
 
     public void delete(String[] student) {
@@ -66,6 +130,7 @@ class Classroom {
                 this.students = newstudents;
             }
         }
+        savefile();
     }
 
     public void add(String[] student) {
@@ -82,6 +147,7 @@ class Classroom {
 
         newstudents[this.filelength - 1] = student;
         this.students = newstudents;
+        savefile();
     }
 
     public void sortbyid() {
@@ -119,6 +185,7 @@ class Classroom {
 
             }
         } while (!sorted);
+        savefile();
     }
 
     public int[] gradestatistics() {
@@ -167,6 +234,7 @@ class Classroom {
         }
     }
 
+
     public void generatefile(String filename) {
         String str = generatestring();
         try {
@@ -178,6 +246,20 @@ class Classroom {
         }
 
     }
+
+    private void savefile() {
+        try {
+            ObjectOutputStream filewriter = new ObjectOutputStream(new FileOutputStream("classroom.jobj"));
+            filewriter.writeObject(students);
+            // Writes the array of primes to a file
+            filewriter.close();
+        } catch (IOException e) {
+
+        } finally {
+            // Make sure to catch these and do nothing
+        }
+    }
+
 
     public String generatestring() {
         String str = "";

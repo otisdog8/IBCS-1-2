@@ -64,7 +64,7 @@
 708680 10 Ramos O'Neill-Finnegan Male 
 712601 12 Hoffman Noah Male 
 713036 10 Yang Yanzhen Female 
-723099 12 Kitzhaber Logan Male 
+723099 11 Kitzhaber Logan Male 
 723129 12 Legge Stephen Male 
 723274 12 Santos Taylor Male 
 723813 12 Becker Sophie Female 
