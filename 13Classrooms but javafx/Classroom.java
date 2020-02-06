@@ -13,9 +13,9 @@ import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 
 class Classroom {
-    Student[] students;
-    String sourcefilename;
-    int filelength;
+    private Student[] students;
+    private String sourcefilename;
+    private int filelength;
 
     Classroom() {
         
@@ -97,7 +97,7 @@ class Classroom {
         Student result = null;
         
         for (int i = 0; i < this.filelength; i++) {
-            if (this.students[i].data[field].equals(data)) {
+            if (this.students[i].getData()[field].equals(data)) {
                 result = this.students[i];
             }
         }
@@ -117,7 +117,7 @@ class Classroom {
         Student[] newstudents;
         int offset;
         for (int i = 0; i < this.filelength; i++) {
-            if (student.studentnum == this.students[i].studentnum) {
+            if (student.getID() == this.students[i].getID()) {
                 this.filelength--;
                 offset = 0;
                 newstudents = new Student[this.filelength];
@@ -151,7 +151,7 @@ class Classroom {
     }
 
     public void sortbyid() {
-        Comparator comparator = new StudentIDComparator();
+        StudentIDComparator comparator = new StudentIDComparator();
 
         sort(comparator);
     }
@@ -160,7 +160,7 @@ class Classroom {
         int maxim = 0;
 
         for (int i = 0; i < this.filelength; i++) {
-            maxim = Math.max(this.students[i].lastname.length(), maxim);
+            maxim = Math.max(this.students[i].getLastName().length(), maxim);
         }
 
         LastNameComparator comparator = new LastNameComparator(maxim);
@@ -168,7 +168,7 @@ class Classroom {
         sort(comparator);
     }
 
-    private void sort(Comparator comparator) {
+    private void sort(Comparator<Student> comparator) {
         Student swap;
         boolean sorted;
 
@@ -193,7 +193,7 @@ class Classroom {
         int[] grades = new int[4];
 
         for (int i = 0; i < this.filelength; i++) {
-            lineparts = this.students[i].data;
+            lineparts = this.students[i].getData();
             grades[Integer.parseInt(lineparts[1]) - 9]++; // Adds one to the appropriate array
 
         }
@@ -206,7 +206,7 @@ class Classroom {
         int[] genders = new int[2];
 
         for (int i = 0; i < this.filelength; i++) {
-            lineparts = this.students[i].data;
+            lineparts = this.students[i].getData();
             genders[((int) lineparts[4].toCharArray()[0] - (int) 'F') / ((int) 'M' - (int) 'F')]++;
         }
 
@@ -218,7 +218,7 @@ class Classroom {
         int[] lastnames = new int[26];
 
         for (int i = 0; i < this.filelength; i++) {
-            lineparts = this.students[i].data;
+            lineparts = this.students[i].getData();
             lastnames[(int) lineparts[2].toCharArray()[0] - (int) 'A']++;
         }
 
@@ -265,7 +265,7 @@ class Classroom {
         String str = "";
         for (int i = 0; i < this.students.length; i++) {
             for (int j = 0; j < 5; j++) {
-                str += this.students[i].data[j] + " ";
+                str += this.students[i].getData()[j] + " ";
             }
             str += "\n";
         }
@@ -298,53 +298,3 @@ class Classroom {
 
 }
 
-class LastNameComparator implements Comparator<Student> {
-    int padding;
-
-    LastNameComparator(int padding) {
-        this.padding = padding;
-    }
-
-    public int compare(Student o1, Student o2) {
-        return comparestrings(o1.lastname, o2.lastname, this.padding);
-    }
-
-    private static String padstring(String string, int padding, char padchar) {
-        if (string.length() < padding) {
-            for (int i = 0; i < padding - string.length() + 1; i++) {
-                string += padchar;
-            }
-        }
-        return string;
-    }
-
-    private static int comparestrings(String check1, String check2, int padding) {
-        check1 = padstring(check1, padding, 'a').toLowerCase();
-        check2 = padstring(check2, padding, 'a').toLowerCase();
-
-        // recursively calculate which string is bigger
-        return checkstring(check1, check2, 0);
-    }
-
-    private static int checkstring(String check1, String check2, int index) {
-        if ((int) check1.charAt(index) > (int) check2.charAt(index)) {
-            return 1;
-        } else if ((int) check1.charAt(index) < (int) check2.charAt(index)) {
-            return -1;
-        } else {
-            index++;
-            if (index > check1.length() - 1) {
-                return 0;
-            }
-            return checkstring(check1, check2, index);
-        }
-
-    }
-}
-
-class StudentIDComparator implements Comparator<Student> {
-    public int compare(Student o1, Student o2) {
-        return (int) Math.signum(o1.studentnum - o2.studentnum);
-    }
-
-}

@@ -3,7 +3,6 @@
 //*                              *
 //********************************
 
-import java.util.Comparator;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -61,11 +60,11 @@ public class RootJLab7b {
 
     private static void searchstudents() {
         Student studenttodisplay = search();
-        if (studenttodisplay.studentnum == 1) {
+        if (studenttodisplay.isGeneric()) {
             System.out.println("You found nothing");
         }
         else {
-            System.out.println("You found " + studenttodisplay.firstname + " " + studenttodisplay.lastname + " " + studenttodisplay.studentnum + ".   ");
+            System.out.println("You found " + studenttodisplay.getFirstName() + " " + studenttodisplay.getLastName() + " " + studenttodisplay.getID() + ".   ");
         }
 
     }
@@ -73,7 +72,7 @@ public class RootJLab7b {
     private static void delete() {
         Student studenttodelete = search();
         
-        System.out.print("Do you really want to delete " + studenttodelete.firstname + " " + studenttodelete.lastname + " " + studenttodelete.studentnum + "(y/n)?   ");
+        System.out.print("Do you really want to delete " + studenttodelete.getFirstName() + " " + studenttodelete.getLastName() + " " + studenttodelete.getID() + "(y/n)?   ");
         String result = input.nextLine();
 
         if (result.equals("y")) {
