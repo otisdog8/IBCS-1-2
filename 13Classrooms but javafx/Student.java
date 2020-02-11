@@ -29,12 +29,20 @@ class Student {
         return new Student(this.data);
     }
 
+    public void setID(int ID) {
+        this.studentnum = SimpleIntegerProperty(ID);
+    }
+
     public int getID() {
         return this.studentnum.get();
     }
 
     public SimpleIntegerProperty getIDProperty() {
         return this.studentnum;
+    }
+
+    public void setGrade(int ID) {
+        this.grade = SimpleIntegerProperty(Integer.parseInt(data[1]));
     }
 
     public int getGrade() {
@@ -45,6 +53,11 @@ class Student {
         return this.studentnum;
     }
 
+    public void setLastName(int ID) {
+        this.lastname = SimpleStringProperty(data[2]);
+
+    }
+
     public String getLastName() {
         return this.lastname.get();
     }
@@ -53,12 +66,20 @@ class Student {
         return this.studentnum;
     }
 
+    public void setFirstName(int ID) {
+        
+    }
+
     public String getFirstName() {
         return this.firstname.get();
     }
 
     public SimpleStringProperty getFirstNameProperty() {
         return this.studentnum;
+    }
+
+    public void setGender(int ID) {
+        
     }
 
     public String getGender() {
