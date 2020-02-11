@@ -1,6 +1,7 @@
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableView;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Menu;
@@ -31,4 +32,8 @@ public class RootJLab13 extends Application{
         primaryStage.setScene(new Scene(root, 300, 300));
         primaryStage.show();
     }
+}
+
+class Editable<S,T> extends TableCell<S,T> {
+    
 }

@@ -51,7 +51,7 @@ public class RootJLab8 {
         while (scanner.hasNextLine()) {
             lineparts = scanner.nextLine().split(" ");
             grades[Integer.parseInt(lineparts[1]) - 9]++; // Adds one to the appropriate array by subtracting 9 from the grade level
-            genders[((int) lineparts[4].toCharArray()[0] - (int) 'F') / ((int) 'M' - (int) 'F')]++; // Uses char arithmetic to assign an 'F' to 1 and an 'M' to 0
+            genders[((int) lineparts[4].toCharArray()[0] - (int) 'M') / ((int) 'F' - (int) 'M')]++; // Uses char arithmetic to assign an 'F' to 1 and an 'M' to 0
             lastnames[(int) lineparts[2].toCharArray()[0] - (int) 'A']++; //Subtracts 'A' to index lastnames.
         }
 

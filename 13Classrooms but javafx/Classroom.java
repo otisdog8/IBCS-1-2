@@ -11,9 +11,10 @@ import javax.naming.NameNotFoundException;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
+import javafx.collections.ObservableList;
 
 class Classroom {
-    private Student[] students;
+    private ObservableList<Student> students;
     private String sourcefilename;
     private int filelength;
 
@@ -42,7 +43,7 @@ class Classroom {
         try {
             ObjectInputStream filereader = new ObjectInputStream(new FileInputStream(filename));
 
-            this.students = (Student[]) filereader.readObject();
+            this.students = (ObservableList<Student>) filereader.readObject();
             // Reads the array of students from a file
             filereader.close();
 
@@ -62,12 +63,12 @@ class Classroom {
         this.sourcefilename = filename;
         int filelength = getfilelength();
         this.filelength = filelength;
-        this.students = new Student[filelength];
+        this.students = new ObservableList<Student>();
 
         Scanner filescanner = generatescanner();
 
         for (int i = 0; i < filelength; i++) {
-            this.students[i] = new Student(filescanner.nextLine().split(" "));
+            this.students.add(new Student(filescanner.nextLine().split(" ")));
         }
         savefile();
     }
@@ -97,8 +98,8 @@ class Classroom {
         Student result = null;
         
         for (int i = 0; i < this.filelength; i++) {
-            if (this.students[i].getData()[field].equals(data)) {
-                result = this.students[i];
+            if (this.students.get(i).getData()[field].equals(data)) {
+                result = this.students.get(i);
             }
         }
 
@@ -117,7 +118,7 @@ class Classroom {
         Student[] newstudents;
         int offset;
         for (int i = 0; i < this.filelength; i++) {
-            if (student.getID() == this.students[i].getID()) {
+            if (student.getID() == this.students.get(i).getID()) {
                 this.filelength--;
                 offset = 0;
                 newstudents = new Student[this.filelength];
@@ -138,15 +139,7 @@ class Classroom {
     }
 
     public void add(Student student) {
-        this.filelength++;
-        Student[] newstudents = new Student[this.filelength];
-
-        for (int i = 0; i < this.filelength - 1; i++) {
-            newstudents[i] = students[i];
-        }
-
-        newstudents[this.filelength - 1] = student;
-        this.students = newstudents;
+        this.students.add(student);
         savefile();
     }
 
@@ -160,7 +153,7 @@ class Classroom {
         int maxim = 0;
 
         for (int i = 0; i < this.filelength; i++) {
-            maxim = Math.max(this.students[i].getLastName().length(), maxim);
+            maxim = Math.max(this.students.get(i).getLastName().length(), maxim);
         }
 
         LastNameComparator comparator = new LastNameComparator(maxim);
@@ -176,10 +169,10 @@ class Classroom {
             sorted = true;
             for (int i = 0; i < this.filelength - 1; i++) {
 
-                if (inttobool(comparator.compare(this.students[i], this.students[i + 1]))) {
-                    swap = this.students[i];
-                    this.students[i] = this.students[i + 1];
-                    this.students[i + 1] = swap;
+                if (inttobool(comparator.compare(this.students.get(i), this.students.get(i + 1)))) {
+                    swap = this.students.get(i);
+                    this.students.set(i, this.students.get(i + 1));
+                    this.students.set(i + 1, swap);
                     sorted = false;
                 }
 
@@ -193,7 +186,7 @@ class Classroom {
         int[] grades = new int[4];
 
         for (int i = 0; i < this.filelength; i++) {
-            lineparts = this.students[i].getData();
+            lineparts = this.students.get(i).getData();
             grades[Integer.parseInt(lineparts[1]) - 9]++; // Adds one to the appropriate array
 
         }
@@ -206,7 +199,7 @@ class Classroom {
         int[] genders = new int[2];
 
         for (int i = 0; i < this.filelength; i++) {
-            lineparts = this.students[i].getData();
+            lineparts = this.students.get(i).getData();
             genders[((int) lineparts[4].toCharArray()[0] - (int) 'F') / ((int) 'M' - (int) 'F')]++;
         }
 
@@ -218,7 +211,7 @@ class Classroom {
         int[] lastnames = new int[26];
 
         for (int i = 0; i < this.filelength; i++) {
-            lineparts = this.students[i].getData();
+            lineparts = this.students.get(i).getData();
             lastnames[(int) lineparts[2].toCharArray()[0] - (int) 'A']++;
         }
 
@@ -265,7 +258,7 @@ class Classroom {
         String str = "";
         for (int i = 0; i < this.students.length; i++) {
             for (int j = 0; j < 5; j++) {
-                str += this.students[i].getData()[j] + " ";
+                str += this.students.get(i).getData()[j] + " ";
             }
             str += "\n";
         }
