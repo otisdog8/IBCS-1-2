@@ -289,5 +289,9 @@ class Classroom {
         }
     }
 
+    public ObservableList<Student> getStudents() {
+        return this.students;
+    }
+
 }
 

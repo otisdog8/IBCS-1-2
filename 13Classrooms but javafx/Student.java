@@ -31,63 +31,67 @@ class Student {
 
     public void setID(int ID) {
         this.studentnum = SimpleIntegerProperty(ID);
+        this.data[0] = String.valueOf(ID);
     }
 
     public int getID() {
         return this.studentnum.get();
     }
 
-    public SimpleIntegerProperty getIDProperty() {
+    public SimpleIntegerProperty IDProperty() {
         return this.studentnum;
     }
 
-    public void setGrade(int ID) {
-        this.grade = SimpleIntegerProperty(Integer.parseInt(data[1]));
+    public void setGrade(int grade) {
+        this.grade = SimpleIntegerProperty(grade);
+        this.data[1] = String.valueOf(grade);
     }
 
     public int getGrade() {
         return this.grade.get();
     }
 
-    public SimpleIntegerProperty getGradeProperty() {
-        return this.studentnum;
+    public SimpleIntegerProperty gradeProperty() {
+        return this.grade;
     }
 
-    public void setLastName(int ID) {
-        this.lastname = SimpleStringProperty(data[2]);
-
+    public void setLastName(String lastname) {
+        this.lastname = SimpleStringProperty(lastname);
+        this.data[2] = lastname;
     }
 
     public String getLastName() {
         return this.lastname.get();
     }
 
-    public SimpleStringProperty getLastNameProperty() {
-        return this.studentnum;
+    public SimpleStringProperty lastNameProperty() {
+        return this.lastname;
     }
 
-    public void setFirstName(int ID) {
-        
+    public void setFirstName(String firstname) {
+        this.firstname = SimpleStringProperty(firstname);
+        this.data[3] = firstname;
     }
 
     public String getFirstName() {
         return this.firstname.get();
     }
 
-    public SimpleStringProperty getFirstNameProperty() {
-        return this.studentnum;
+    public SimpleStringProperty firstNameProperty() {
+        return this.firstname;
     }
 
-    public void setGender(int ID) {
-        
+    public void setGender(String gender) {
+        this.gender = SimpleStringProperty(gender);
+        this.data[4] = gender;
     }
 
     public String getGender() {
         return this.gender.get();
     }
 
-    public SimpleStringProperty getGenderProperty() {
-        return this.studentnum;
+    public SimpleStringProperty genderProperty() {
+        return this.gender;
     }
 
     public String[] getData() {
