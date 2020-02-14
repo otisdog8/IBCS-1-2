@@ -1,7 +1,7 @@
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
-class Student {
+public class Student {
     private SimpleIntegerProperty studentnum;
     private SimpleIntegerProperty grade;
     private SimpleStringProperty lastname;
@@ -11,11 +11,11 @@ class Student {
     private boolean generic;
 
     public Student(String[] data) {
-        this.studentnum = SimpleIntegerProperty(Integer.parseInt(data[0]));
-        this.grade = SimpleIntegerProperty(Integer.parseInt(data[1]));
-        this.lastname = SimpleStringProperty(data[2]);
-        this.firstname = SimpleStringProperty(data[3]);
-        this.gender = SimpleStringProperty(data[4]);
+        this.studentnum = new SimpleIntegerProperty(Integer.parseInt(data[0]));
+        this.grade = new SimpleIntegerProperty(Integer.parseInt(data[1]));
+        this.lastname = new SimpleStringProperty(data[2]);
+        this.firstname = new SimpleStringProperty(data[3]);
+        this.gender = new SimpleStringProperty(data[4]);
         this.data = data;
         this.generic = false;
     }
@@ -30,7 +30,7 @@ class Student {
     }
 
     public void setID(int ID) {
-        this.studentnum = SimpleIntegerProperty(ID);
+        this.studentnum = new SimpleIntegerProperty(ID);
         this.data[0] = String.valueOf(ID);
     }
 
@@ -43,7 +43,7 @@ class Student {
     }
 
     public void setGrade(int grade) {
-        this.grade = SimpleIntegerProperty(grade);
+        this.grade = new SimpleIntegerProperty(grade);
         this.data[1] = String.valueOf(grade);
     }
 
@@ -56,7 +56,7 @@ class Student {
     }
 
     public void setLastName(String lastname) {
-        this.lastname = SimpleStringProperty(lastname);
+        this.lastname = new SimpleStringProperty(lastname);
         this.data[2] = lastname;
     }
 
@@ -69,7 +69,7 @@ class Student {
     }
 
     public void setFirstName(String firstname) {
-        this.firstname = SimpleStringProperty(firstname);
+        this.firstname = new SimpleStringProperty(firstname);
         this.data[3] = firstname;
     }
 
@@ -82,7 +82,7 @@ class Student {
     }
 
     public void setGender(String gender) {
-        this.gender = SimpleStringProperty(gender);
+        this.gender = new SimpleStringProperty(gender);
         this.data[4] = gender;
     }
 
@@ -102,4 +102,3 @@ class Student {
         return this.generic;
     }
 }
-    

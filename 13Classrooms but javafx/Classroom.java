@@ -1,4 +1,4 @@
-import java.io.BufferedWriter;
+ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -11,10 +11,12 @@ import javax.naming.NameNotFoundException;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import javafx.beans.property.SimpleListProperty;
 import javafx.collections.ObservableList;
 
 class Classroom {
-    private ObservableList<Student> students;
+    private SimpleListProperty<Student> students;
     private String sourcefilename;
     private int filelength;
 
@@ -43,7 +45,7 @@ class Classroom {
         try {
             ObjectInputStream filereader = new ObjectInputStream(new FileInputStream(filename));
 
-            this.students = (ObservableList<Student>) filereader.readObject();
+            this.students = (SimpleListProperty<Student>) filereader.readObject();
             // Reads the array of students from a file
             filereader.close();
 
@@ -63,7 +65,7 @@ class Classroom {
         this.sourcefilename = filename;
         int filelength = getfilelength();
         this.filelength = filelength;
-        this.students = new ObservableList<Student>();
+        this.students = new SimpleListProperty<Student>(javafx.collections.FXCollections.observableList(new ArrayList<Student>()));;
 
         Scanner filescanner = generatescanner();
 
@@ -115,22 +117,7 @@ class Classroom {
     }
 
     public void delete(Student student) {
-        Student[] newstudents;
-        int offset;
-        for (int i = 0; i < this.filelength; i++) {
-            if (student.getID() == this.students.get(i).getID()) {
-                this.filelength--;
-                offset = 0;
-                newstudents = new Student[this.filelength];
-                for (int j = 0; j < this.filelength; j++) {
-                    if (j == i) {
-                        offset++;
-                    }
-                    newstudents[j] = students[j + offset];
-                }
-                this.students = newstudents;
-            }
-        }
+        this.students.remove(student);
         savefile();
     }
 
@@ -256,7 +243,7 @@ class Classroom {
 
     public String generatestring() {
         String str = "";
-        for (int i = 0; i < this.students.length; i++) {
+        for (int i = 0; i < this.students.getSize(); i++) {
             for (int j = 0; j < 5; j++) {
                 str += this.students.get(i).getData()[j] + " ";
             }

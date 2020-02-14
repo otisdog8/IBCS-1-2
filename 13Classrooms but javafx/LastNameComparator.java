@@ -9,7 +9,7 @@ class LastNameComparator implements Comparator<Student> {
     }
 
     public int compare(Student o1, Student o2) {
-        return comparestrings(o1.lastname, o2.lastname, this.padding);
+        return comparestrings(o1.getLastName(), o2.getLastName(), this.padding);
     }
 
     private static String padstring(String string, int padding, char padchar) {

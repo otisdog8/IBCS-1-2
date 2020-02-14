@@ -6,7 +6,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Menu;
-
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -25,60 +24,79 @@ public class RootJLab13 extends Application{
     }
 
     public void start(Stage primaryStage) {
-        Vbox root;
+        VBox root;
         MenuBar topbar;
         Classroom classroom = new Classroom();
 
         TableView<Student> studentview = generateTable(classroom);
 
-        root = new Vbox(topbar, studentview);
+        root = new VBox(studentview);
 
         primaryStage.setScene(new Scene(root, 300, 300));
         primaryStage.show();
     }
 
     public TableView<Student> generateTable(Classroom classroom) {
-        TableView<Student> studentview; //Note: we want to change the TableRow/TableColumn/Cell to make it work in a specific way
+        TableView<Student> studentview = new TableView<Student>(); //Note: we want to change the TableRow/TableColumn/Cell to make it work in a specific way
         //CheckBoxTableCell x
         //PropertyValueFactory
 
         TableColumn<Student, String> firstNameColumn, lastNameColumn, genderColumn;
         TableColumn<Student, Integer> idColumn, gradeColumn;
-        TableColumn<Student, CheckBox> selectColumn;
+        TableColumn<Student, Boolean> selectColumn;
 
         studentview.setItems(classroom.getStudents());
 
-        Callback<TableColumn, TableCell> cellFactory = new Callback<TableColumn, TableCell>() {
+        Callback<TableColumn<Student,String>, TableCell<Student,String>> cellFactoryString = new Callback<TableColumn<Student,String>, TableCell<Student,String>>() {
             @Override
-            public TableCell call(TableColumn c) {
-                return new TextFieldTableCell();
+            public TableCell<Student,String> call(TableColumn<Student,String> c) {
+                return new TextFieldTableCell<Student,String>();
             }
         };
 
+        Callback<TableColumn<Student,Integer>, TableCell<Student,Integer>> cellFactoryInteger = new Callback<TableColumn<Student,Integer>, TableCell<Student,Integer>>() {
+            @Override
+            public TableCell<Student,Integer> call(TableColumn<Student,Integer> c) {
+                return new TextFieldTableCell<Student,Integer>();
+            }
+        };
+
+        Callback<TableColumn<Student,Integer>, TableCell<Student,Integer>> cellFactorySelect = new Callback<TableColumn<Student,Integer>, TableCell<Student,Integer>>() {
+            @Override
+            public TableCell<Student,Integer> call(TableColumn<Student,Integer> c) {
+                return new TextFieldTableCell<Student,Integer>();
+            }
+        };
+
+
+        selectColumn = new TableColumn<Student,Boolean>();
+
         idColumn = new TableColumn<Student,Integer>("ID");
         idColumn.setSortable(true);
-        idColumn.setCellValueFactory(new PropertyValueFactory("ID"));
-        idColumn.setCellFactory(cellFactory);
+        idColumn.setCellValueFactory(new PropertyValueFactory<Student,Integer>("ID"));
+        idColumn.setCellFactory(cellFactoryInteger);
 
-        gradecolumn = new TableColumn<Student,Integer>("Grade");
-        gradecolumn.setSortable(true);
-        gradecolumn.setCellValueFactory(new PropertyValueFactory("grade"));
-        gradecolumn.setCellFactory(cellFactory);
+        gradeColumn = new TableColumn<Student,Integer>("Grade");
+        gradeColumn.setSortable(true);
+        gradeColumn.setCellValueFactory(new PropertyValueFactory<Student,Integer>("grade"));
+        gradeColumn.setCellFactory(cellFactoryInteger);
 
         firstNameColumn = new TableColumn<Student,String>("First Name");
         firstNameColumn.setSortable(true);
-        firstNameColumn.setCellValueFactory(new PropertyValueFactory("firstName"));
-        firstNameColumn.setCellFactory(cellFactory);
+        firstNameColumn.setCellValueFactory(new PropertyValueFactory<Student,String>("firstName"));
+        firstNameColumn.setCellFactory(cellFactoryString);
 
         lastNameColumn = new TableColumn<Student,String>("Last Name");
         lastNameColumn.setSortable(true);
-        lastNameColumn.setCellValueFactory(new PropertyValueFactory("lastName"));
-        lastNameColumn.setCellFactory(cellFactory);
+        lastNameColumn.setCellValueFactory(new PropertyValueFactory<Student,String>("lastName"));
+        lastNameColumn.setCellFactory(cellFactoryString);
 
         genderColumn = new TableColumn<Student,String>("Gender");
         genderColumn.setSortable(true);
-        genderColumn.setCellValueFactory(new PropertyValueFactory("gender"));
-        genderColumn.setCellFactory(cellFactory);
+        genderColumn.setCellValueFactory(new PropertyValueFactory<Student,String>("gender"));
+        genderColumn.setCellFactory(cellFactoryString);
+
+        studentview.getColumns().addAll(selectColumn, idColumn, gradeColumn, firstNameColumn, lastNameColumn, genderColumn);
 
         return studentview;
     }
