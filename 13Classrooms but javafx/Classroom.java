@@ -1,4 +1,4 @@
- import java.io.BufferedWriter;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -20,45 +20,12 @@ class Classroom {
     private String sourcefilename;
     private int filelength;
 
+    Classroom(String filename) {
+        loadText(filename);
+    }
+
     Classroom() {
-        
-        //try loading classroom.jobj
-        //if fail, load classlist.txt
-        if (!load("classroom.jobj")) {
-            load("classlist.txt");
-        }
-
-    }
-
-    public boolean load(String filename) {
-        if (filename.endsWith(".jobj")) {
-            return loadJobj(filename);
-        } else if (filename.endsWith(".txt")) {
-            loadText(filename);
-        } else { //Try loading strings regardless
-            loadText(filename);
-        }
-        return false;
-    }
-
-    private boolean loadJobj(String filename) {
-        try {
-            ObjectInputStream filereader = new ObjectInputStream(new FileInputStream(filename));
-
-            this.students = (SimpleListProperty<Student>) filereader.readObject();
-            // Reads the array of students from a file
-            filereader.close();
-
-            return true;
-        } catch (IOException e) {
-
-        } catch (ClassNotFoundException e) {
-            // Make sure to catch these and do nothing
-        } catch (ClassCastException e) {
-        
-        }
-        return false;
-
+        loadText("classlist.txt");
     }
 
     private void loadText(String filename) {
@@ -214,6 +181,9 @@ class Classroom {
         }
     }
 
+    private void savefile() {
+        generatefile(this.sourcefilename);
+    }
 
     public void generatefile(String filename) {
         String str = generatestring();
@@ -227,26 +197,17 @@ class Classroom {
 
     }
 
-    private void savefile() {
-        try {
-            ObjectOutputStream filewriter = new ObjectOutputStream(new FileOutputStream("classroom.jobj"));
-            filewriter.writeObject(students);
-            // Writes the array of primes to a file
-            filewriter.close();
-        } catch (IOException e) {
-
-        } finally {
-            // Make sure to catch these and do nothing
-        }
-    }
 
 
     public String generatestring() {
         String str = "";
         for (int i = 0; i < this.students.getSize(); i++) {
-            for (int j = 0; j < 5; j++) {
-                str += this.students.get(i).getData()[j] + " ";
-            }
+            str += Integer.toString(this.students.get(i).getID());
+            str += Integer.toString(this.students.get(i).getGrade());
+            str += Integer.toString(this.students.get(i).getAs());
+            str += Integer.toString(this.students.get(i).getID());
+            str += Integer.toString(this.students.get(i).getID());
+
             str += "\n";
         }
         return str;
