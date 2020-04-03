@@ -4,6 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.util.Comparator;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.io.ObjectInputStream;
 import javax.naming.NameAlreadyBoundException;
@@ -20,30 +21,12 @@ class Classroom {
     private String sourcefilename;
     private int filelength;
 
-    Classroom(String filename) {
-        loadText(filename);
-    }
-
-    Classroom() {
-        loadText("classlist.txt");
-    }
-
-    private void loadText(String filename) {
-        this.sourcefilename = filename;
-        int filelength = getfilelength();
-        this.filelength = filelength;
-        this.students = new SimpleListProperty<Student>(javafx.collections.FXCollections.observableList(new ArrayList<Student>()));;
-
-        Scanner filescanner = generatescanner();
-
-        for (int i = 0; i < filelength; i++) {
-            this.students.add(new Student(filescanner.nextLine().split(" ")));
-        }
-        savefile();
+    public ObservableList<Student> getStudents() {
+        return this.students;
     }
 
     public Student search(String name) {
-        // Searches first by last name, than first name, than returns the generic
+        // Searches first by last name, than first name, than returns the generic if both fail
         try {
             return search(2, name);
         } catch (NameNotFoundException e0) {
@@ -79,13 +62,18 @@ class Classroom {
         return result;
     }
 
+    public void deleteSelected() {
+        this.students.removeIf(x -> x.getSelected());
+        save();
+    }
+
     public void delete(String[] student) {
         delete(new Student(student));
     }
 
     public void delete(Student student) {
         this.students.remove(student);
-        savefile();
+        save();
     }
 
     public void add(String[] student) {
@@ -94,7 +82,7 @@ class Classroom {
 
     public void add(Student student) {
         this.students.add(student);
-        savefile();
+        save();
     }
 
     public void sortbyid() {
@@ -132,7 +120,15 @@ class Classroom {
 
             }
         } while (!sorted);
-        savefile();
+        save();
+    }
+
+    private boolean inttobool(int result) {
+        if (result > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public int[] gradestatistics() {
@@ -173,44 +169,40 @@ class Classroom {
 
     }
 
-    private boolean inttobool(int result) {
-        if (result > 0) {
-            return true;
-        } else {
-            return false;
-        }
+    Classroom(String filename) throws FileNotFoundException{
+        load(filename);
     }
 
-    private void savefile() {
-        generatefile(this.sourcefilename);
-    }
-
-    public void generatefile(String filename) {
-        String str = generatestring();
+    Classroom() {
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
-            writer.write(str);
-            writer.close();
-        } catch (IOException e) {
-            System.out.print("Caught an error\n");
+            load("classlist.txt");
         }
-
+        catch (FileNotFoundException e) {
+            System.out.println("ERROR: main file not found");
+        }
     }
 
-
-
-    public String generatestring() {
-        String str = "";
-        for (int i = 0; i < this.students.getSize(); i++) {
-            str += Integer.toString(this.students.get(i).getID());
-            str += Integer.toString(this.students.get(i).getGrade());
-            str += Integer.toString(this.students.get(i).getAs());
-            str += Integer.toString(this.students.get(i).getID());
-            str += Integer.toString(this.students.get(i).getID());
-
-            str += "\n";
+    public void load(String filename) throws FileNotFoundException {
+        try {
+            loadJava(filename);
         }
-        return str;
+        catch (Exception e) {
+            loadText(filename);
+        }
+    }
+
+    private void loadText(String filename) {
+        this.sourcefilename = filename;
+        int filelength = getfilelength();
+        this.filelength = filelength;
+        this.students = new SimpleListProperty<Student>(javafx.collections.FXCollections.observableList(new ArrayList<Student>()));
+
+        Scanner filescanner = generatescanner();
+
+        for (int i = 0; i < filelength; i++) {
+            this.students.add(new Student(filescanner.nextLine().split(" ")));
+        }
+        save();
     }
 
     private int getfilelength() {
@@ -237,8 +229,65 @@ class Classroom {
         }
     }
 
-    public ObservableList<Student> getStudents() {
-        return this.students;
+    private void loadJava(String filename) throws FileNotFoundException {
+        try {
+            this.sourcefilename = filename;
+            ObjectInputStream oin = new ObjectInputStream(new FileInputStream(filename));
+            this.students = new SimpleListProperty<Student>(javafx.collections.FXCollections.observableList((ArrayList<Student>) oin.readObject()));
+            this.filelength = this.students.size();
+        }
+        catch (Exception e) {
+            throw new FileNotFoundException();
+        }
+    }
+
+    public void save() {
+        save(this.sourcefilename, false);
+    }
+
+    public void save(String filename, boolean text) {
+        if (text) {
+            saveText(filename);
+        }
+        else {
+            saveJava(filename);
+        }
+    }
+
+    private void saveText(String filename) {
+        String str = generatestring();
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
+            writer.write(str);
+            writer.close();
+        } catch (IOException e) {
+            System.out.print("Caught an error\n");
+        }
+    }
+
+    public String generatestring() {
+        String str = "";
+        for (int i = 0; i < this.students.getSize(); i++) {
+            str += Integer.toString(this.students.get(i).getID()) + " ";
+            str += Integer.toString(this.students.get(i).getGrade()) + " ";
+            str += this.students.get(i).getLastName() + " ";
+            str += this.students.get(i).getFirstName() + " ";
+            str += this.students.get(i).getGender();
+
+            str += "\n";
+        }
+        return str;
+    }
+
+    private void saveJava(String filename) {
+        try {
+            ObjectOutputStream oout = new ObjectOutputStream(new FileOutputStream(filename));
+            oout.writeObject(new ArrayList<Student>(this.students));
+            oout.close();
+        }
+        catch (Exception e) {
+            System.out.println("Caught an error! " + e.toString());
+        }
     }
 
 }
