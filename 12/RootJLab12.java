@@ -4,6 +4,7 @@ import javafx.scene.control.TextField;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 import javafx.stage.Stage;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -16,28 +17,28 @@ public class RootJLab12 extends Application{
     public void start(Stage primaryStage) {
         TextField fahrenheit, celcius, kelvin;
         Text farenheitText, celciusText, kelvinText;
-        VBox inputs, labels;
-        HBox root;
+        GridPane root = new GridPane();
 
         fahrenheit = new TextField();
         celcius = new TextField();
         kelvin = new TextField();
 
         
-        
+        //These just do conversions. Round to 10s but I'll fix that before submitting.
         fahrenheit.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent event) {
                 String textF, textC, textK;
-                double tempF, tempC, tempK;
+                int tempC, tempK;
+                double tempF;
                 textF = fahrenheit.getText();
                 tempF = Double.parseDouble(textF);
-                tempC = (tempF - 32.0) * 5.0 / 9.0;
-                tempK = tempC + 273.15;
-                tempC = Math.round(tempC * 10.0) / 10.0;
-                tempK = Math.round(tempK * 10.0) / 10.0;
-                textC = Double.toString(tempC);
-                textK = Double.toString(tempK);
+                tempC = ((int) tempF - 32) * 5 / 9;
+                tempK = tempC + 273;
+                tempC = Math.round(tempC);
+                tempK = Math.round(tempK);
+                textC = Integer.toString(tempC);
+                textK = Integer.toString(tempK);
                 celcius.setText(textC);
                 kelvin.setText(textK);
             }
@@ -47,15 +48,16 @@ public class RootJLab12 extends Application{
             @Override
             public void handle(ActionEvent event) {
                 String textF, textC, textK;
-                double tempF, tempC, tempK;
+                int tempF, tempK;
+                double tempC;
                 textC = celcius.getText();
                 tempC = Double.parseDouble(textC);
-                tempF = tempC * 9.0 / 5.0 + 32.0;
-                tempK = tempC + 273.15;
-                tempF = Math.round(tempF * 10.0) / 10.0;
-                tempK = Math.round(tempK * 10.0) / 10.0;
-                textF = Double.toString(tempF);
-                textK = Double.toString(tempK);
+                tempF = (int) tempC * 9 / 5 + 32;
+                tempK = (int) tempC + 273;
+                tempF = Math.round(tempF);
+                tempK = Math.round(tempK);
+                textF = Integer.toString(tempF);
+                textK = Integer.toString(tempK);
                 fahrenheit.setText(textF);
                 kelvin.setText(textK);
             }
@@ -65,29 +67,34 @@ public class RootJLab12 extends Application{
             @Override
             public void handle(ActionEvent event) {
                 String textF, textC, textK;
-                double tempF, tempC, tempK;
+                int tempF, tempC;
+                double tempK;
                 textK = kelvin.getText();
                 tempK = Double.parseDouble(textK);
-                tempC = tempK - 273.15;
-                tempF = tempC * 9.0 / 5.0 + 32.0;
-                tempF = Math.round(tempF * 10.0) / 10.0;
-                tempC = Math.round(tempC * 10.0) / 10.0;
-                textF = Double.toString(tempF);
-                textC = Double.toString(tempC);
+                tempC = (int) tempK - 273;
+                tempF = tempC * 9 / 5 + 32;
+                tempF = Math.round(tempF);
+                tempC = Math.round(tempC);
+                textF = Integer.toString(tempF);
+                textC = Integer.toString(tempC);
                 fahrenheit.setText(textF);
                 celcius.setText(textC);
             }
         });
 
-        inputs = new VBox(fahrenheit,celcius,kelvin);
+        root.add(fahrenheit, 2, 1);
+        root.add(celcius, 2, 2);
+        root.add(kelvin, 2, 3);
 
-        farenheitText = new Text("Farenheit");
-        celciusText = new Text("Celcius");
-        kelvinText = new Text("Kelvin");
 
-        labels = new VBox(farenheitText, celciusText, kelvinText);
 
-        root = new HBox(labels, inputs);
+        farenheitText = new Text("Farenheit: ");
+        celciusText = new Text("Celcius: ");
+        kelvinText = new Text("Kelvin: ");
+
+        root.add(farenheitText, 1, 1);
+        root.add(celciusText, 1, 2);
+        root.add(kelvinText, 1, 3);
 
         primaryStage.setScene(new Scene(root, 300, 300));
         primaryStage.show();

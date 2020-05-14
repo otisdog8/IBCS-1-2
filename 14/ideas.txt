@@ -1,0 +1,5 @@
+1. Custom implement set to find when the thing becomes stable
+2. different colors based on age
+3. Wrap around
+4. Update with Properties instead of manually updating rectangles
+5. Rectangles

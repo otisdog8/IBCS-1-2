@@ -49,7 +49,7 @@ public class RootJLab11 extends Application {
         objectPane.getTransforms().add(scale);
         objectPane.getChildren().addAll(fillInCircle, text, transparentCircle, line, transparentRectangle, fillInRectangle);
 
-        scaleBtn = new Button("Scale");
+        scaleBtn = new Button("Scale"); //Scale applies to the whole Pane, but color is different
         scaleBtn.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent event) {

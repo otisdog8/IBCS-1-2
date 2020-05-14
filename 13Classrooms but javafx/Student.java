@@ -2,10 +2,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Observable;
 
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 
 public class Student implements Serializable {
     private transient SimpleIntegerProperty studentnum;
@@ -19,7 +22,7 @@ public class Student implements Serializable {
 
     static final long serialVersionUID = 214;
 
-    public Student(String[] data) {
+    public Student(String[] data) throws Exception {
         this.studentnum = new SimpleIntegerProperty(Integer.parseInt(data[0]));
         this.grade = new SimpleIntegerProperty(Integer.parseInt(data[1]));
         this.lastname = new SimpleStringProperty(data[2]);
@@ -28,17 +31,40 @@ public class Student implements Serializable {
         this.selected = new SimpleBooleanProperty(false);
         this.data = data;
         this.generic = false;
+        if (data.length != 5) { //This would signify a formatting error
+            throw new Exception();
+        }
     }
 
     public Student() {
-        this(new String[] {"111111","11","Smith","John","Male"});
+        this.studentnum = new SimpleIntegerProperty(111111);
+        this.grade = new SimpleIntegerProperty(11);
+        this.lastname = new SimpleStringProperty("Smith");
+        this.firstname = new SimpleStringProperty("John");
+        this.gender = new SimpleStringProperty("Male");
+        this.selected = new SimpleBooleanProperty(false);
+        this.data = new String[] {"111111","11","Smith","John","Male"};
         this.generic = true;
     }
 
-    public Student copy() {
+    public String toHumanReadableString() {
+        String res = "\n";
+        res += "Name: " + this.firstname.get() + " " + this.lastname.get() + "\n";
+        res += "Grade: " + Integer.toString(this.grade.get()) + "\n";
+        res += "ID: " + Integer.toString(this.studentnum.get()) + "\n";
+        res += "Gender: " + this.gender.get() + "\n";
+        return res;
+    }
+
+    public void updateData() {
+        this.data = new String[] {Integer.toString(this.studentnum.get()), Integer.toString(this.grade.get()),this.lastname.get(),this.firstname.get(), this.gender.get()};
+    }
+
+    public Student copy() throws Exception{
         return new Student(this.data);
     }
 
+    //Getters and setters for important object properties (ID, grade, lastname, firstname, gender), and the select property (used to delete)
     public void setID(int ID) {
         this.studentnum.set(ID);
         this.data[0] = String.valueOf(ID);
@@ -124,7 +150,7 @@ public class Student implements Serializable {
         return this.generic;
     }
 
-    //Serialization stuff
+    //Serialization stuff - we implement custom serialization because it's simpler
     private void writeObject(ObjectOutputStream oos) throws IOException {
         oos.defaultWriteObject();
         oos.writeInt(this.studentnum.get());

@@ -3,7 +3,9 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
  
@@ -26,7 +28,9 @@ public class RootJLab10 extends Application {
  
             @Override
             public void handle(ActionEvent event) {
-                System.out.println("Make Java Great Again!");
+                Alert java = new Alert(AlertType.INFORMATION);
+                java.setContentText("Make Java Great Again!");
+                java.showAndWait();
             }
         });
         java.setLayoutX(60);

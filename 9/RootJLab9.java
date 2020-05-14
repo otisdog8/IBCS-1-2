@@ -80,12 +80,13 @@ public class RootJLab9 {
 
     private static void fibonacci() {
         ArrayList<Long> nums = new ArrayList<>();
+        nums.add(0L);
         nums.add(1L);
         nums.add(1L);
         System.out.println("How many fibonacci numbers do you want to calculate?");
         int num = ensureint();
-        for (int i = 0; i < num - 2; i++) {
-            nums.add(nums.get(nums.size() - 1) + nums.get(nums.size() - 2)); // Adds next term
+        for (int i = 0; i < num - 3; i++) {
+            nums.add(nums.get(nums.size() - 1) + nums.get(nums.size() - 2)); // Adds next term. If using ArrayLists is an issue here I can code my own implementation
         }
         System.out.println("All fibonacci numbers found are " + nums);
         System.out.println("Your number is: " + nums.get(num - 1));
@@ -208,7 +209,7 @@ public class RootJLab9 {
             for (double x2 = 0; x2 < 2; x2++) {
                 for (double y2 = 0; y2 < 2; y2++) {
                     if (distanceto(x, y, x2, y2) <= 1) {
-                        counter++;
+                        counter++; //Slightly higher accuracy
                     }
                 }
             }

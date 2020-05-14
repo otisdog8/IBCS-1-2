@@ -17,10 +17,12 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.collections.ObservableList;
 
 class Classroom {
+    //Using list properties because implements ObservableList
     private SimpleListProperty<Student> students;
     private String sourcefilename;
     private int filelength;
 
+    //Getter, didn't see a point in making setter or property getter
     public ObservableList<Student> getStudents() {
         return this.students;
     }
@@ -38,6 +40,7 @@ class Classroom {
         }
     }
 
+    //Searches by ID
     public Student search(int id) {
         try {
             return search(0, Integer.toString(id));
@@ -46,10 +49,12 @@ class Classroom {
         }
     }
 
+    //This function does the actual searching, just iterates through and checks if the field matches
     private Student search(int field, String data) throws NameNotFoundException{
         Student result = null;
         
         for (int i = 0; i < this.filelength; i++) {
+            this.students.get(i).updateData();
             if (this.students.get(i).getData()[field].equals(data)) {
                 result = this.students.get(i);
             }
@@ -62,22 +67,30 @@ class Classroom {
         return result;
     }
 
+    //Deletes selected - selected should only be changed by GUI checkboxes (RootJLab13)
     public void deleteSelected() {
         this.students.removeIf(x -> x.getSelected());
+        this.filelength = this.students.size();
         save();
     }
 
-    public void delete(String[] student) {
-        delete(new Student(student));
-    }
-
+    //Deletes a student (should find the student using search)
     public void delete(Student student) {
         this.students.remove(student);
+        this.filelength--;
         save();
     }
 
+    //Adds a student from a string - this is mainly a utility method so that I don't need to catch Exceptions (thrown in student)
+    //Exceptions are there as a way of error checking on the file inputs
     public void add(String[] student) {
-        add(new Student(student));
+        try {
+            add(new Student(student));
+            this.filelength++;
+        }
+        catch (Exception e) {
+
+        }
     }
 
     public void add(Student student) {
@@ -95,6 +108,7 @@ class Classroom {
         int maxim = 0;
 
         for (int i = 0; i < this.filelength; i++) {
+            //Need to find largest name, so that you know how much to pad other names 
             maxim = Math.max(this.students.get(i).getLastName().length(), maxim);
         }
 
@@ -103,6 +117,7 @@ class Classroom {
         sort(comparator);
     }
 
+    //Function that implements the sort - mainly a legacy from when bubblesort was a requirement in the lab, I can use List.sort but won't for reasons
     private void sort(Comparator<Student> comparator) {
         Student swap;
         boolean sorted;
@@ -123,6 +138,7 @@ class Classroom {
         save();
     }
 
+    //Converts results of Comparator.compare to the o1 > o2
     private boolean inttobool(int result) {
         if (result > 0) {
             return true;
@@ -144,6 +160,7 @@ class Classroom {
         return grades;
     }
 
+    //Uses some really funky math to assign 'M' to 0 and 'F' to 1
     public int[] genderstatistics() {
         String[] lineparts;
         int[] genders = new int[2];
@@ -169,43 +186,62 @@ class Classroom {
 
     }
 
+    //Constructor for custom filename (not in use for Lab 13 but might find in somewhere else)
     Classroom(String filename) throws FileNotFoundException{
+        this.students = new SimpleListProperty<Student>(javafx.collections.FXCollections.observableList(new ArrayList<Student>())); 
         load(filename);
     }
 
+    //Default, assumes existence of classlist.txt but will generate empty thing if it either a) doesn't exist or b) is corrupted/incompatible
     Classroom() {
         try {
             load("classlist.txt");
         }
         catch (FileNotFoundException e) {
-            System.out.println("ERROR: main file not found");
+            this.students = new SimpleListProperty<Student>(javafx.collections.FXCollections.observableList(new ArrayList<Student>())); 
+            this.filelength = 0;
+            this.sourcefilename = "classlist.txt";
         }
     }
 
+    //Load routine - tries Java first, and if that failes goes to text, and if that fails, errors
     public void load(String filename) throws FileNotFoundException {
         try {
             loadJava(filename);
         }
         catch (Exception e) {
-            loadText(filename);
+            try {
+                loadText(filename);              
+            }
+            catch (Exception e1) {
+                throw new FileNotFoundException();
+            }
         }
+        save();
     }
 
-    private void loadText(String filename) {
+    //Legacy loading because can't assume existence of proper file
+    private void loadText(String filename) throws Exception{
         this.sourcefilename = filename;
         int filelength = getfilelength();
-        this.filelength = filelength;
-        this.students = new SimpleListProperty<Student>(javafx.collections.FXCollections.observableList(new ArrayList<Student>()));
 
+        if (filelength == 0) {
+            throw new FileNotFoundException();
+        }
+
+        this.students.clear();
         Scanner filescanner = generatescanner();
 
         for (int i = 0; i < filelength; i++) {
             this.students.add(new Student(filescanner.nextLine().split(" ")));
         }
-        save();
+
+        this.filelength = filelength;
+    
     }
 
-    private int getfilelength() {
+    //Dep of above function
+    private int getfilelength() throws FileNotFoundException{
         Scanner scanner = generatescanner();
         int result = 0;
 
@@ -217,7 +253,8 @@ class Classroom {
         return result;
     }
 
-    private Scanner generatescanner() {
+    //Dep of two above functions
+    private Scanner generatescanner() throws FileNotFoundException{
         File file = new File(this.sourcefilename);
 
         try {
@@ -225,15 +262,17 @@ class Classroom {
         } catch (FileNotFoundException e) {
             System.out.print("File not found\n");
             this.sourcefilename = "classlist.txt";
-            return generatescanner();
+            return new Scanner(new File("classlist.txt"));
         }
     }
 
+    //Loads from a java object file
     private void loadJava(String filename) throws FileNotFoundException {
         try {
             this.sourcefilename = filename;
             ObjectInputStream oin = new ObjectInputStream(new FileInputStream(filename));
-            this.students = new SimpleListProperty<Student>(javafx.collections.FXCollections.observableList((ArrayList<Student>) oin.readObject()));
+            this.students.clear();
+            this.students.addAll((ArrayList<Student>) oin.readObject());
             this.filelength = this.students.size();
         }
         catch (Exception e) {
@@ -241,10 +280,12 @@ class Classroom {
         }
     }
 
+    //Saves to default file
     public void save() {
         save(this.sourcefilename, false);
     }
 
+    //Saves to specific file, and need to specify if saving as java or text
     public void save(String filename, boolean text) {
         if (text) {
             saveText(filename);
@@ -291,4 +332,3 @@ class Classroom {
     }
 
 }
-

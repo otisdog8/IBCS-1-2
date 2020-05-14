@@ -8,7 +8,7 @@ class LastNameComparator implements Comparator<Student> {
         this.padding = padding;
     }
 
-    public int compare(Student o1, Student o2) {
+    public int compare(Student o1, Student o2) { // I might or might not have coded this before knowing that strings had build in compare.
         return comparestrings(o1.getLastName(), o2.getLastName(), this.padding);
     }
 
@@ -22,11 +22,11 @@ class LastNameComparator implements Comparator<Student> {
     }
 
     private static int comparestrings(String check1, String check2, int padding) {
-        check1 = padstring(check1, padding, 'a').toLowerCase();
+        check1 = padstring(check1, padding, 'a').toLowerCase(); //Pads the strings out to a certain length
         check2 = padstring(check2, padding, 'a').toLowerCase();
 
-        // recursively calculate which string is bigger
-        return checkstring(check1, check2, 0);
+        // recursively calculate which string is bigger (char by char)
+        return checkstring(check1, check2, 0); 
     }
 
     private static int checkstring(String check1, String check2, int index) {
