@@ -1,3 +1,6 @@
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Random;
 
 import javafx.animation.KeyFrame;
@@ -31,6 +34,7 @@ public class RootJLab13 extends Application {
         String cellNum = getText("How many cells do you want? (default " + Integer.toString(1000 * (int) Math.round(gridSize / 150d)) + ")");
         int numCells;
 
+        
         GridPane gridPane = new GridPane();
         Random rand = new Random();
 
@@ -42,6 +46,8 @@ public class RootJLab13 extends Application {
         catch (NumberFormatException e) {
             numCells = 1000 * (int) Math.round(gridSize / 150d);
         }
+
+        final int newNumCells = numCells;
 
         //Initializing required arrays
         for (int x = 0; x < gridSize; x++) {
@@ -75,6 +81,7 @@ public class RootJLab13 extends Application {
         }
 
         KeyFrame cellUpdate = new KeyFrame(new Duration(10), event -> {
+            //HashSet<boolean[][]> pastcells =  new HashSet<boolean[][]>();
             for (int x = 0; x < gridSize; x++) {
                 for (int y = 0; y < gridSize; y++) {
                     //Neighbors
@@ -98,11 +105,45 @@ public class RootJLab13 extends Application {
                         cells[newGridIndex][x][y] = false;
                         gridCells[x][y].setFill(Color.TRANSPARENT);
                     }
+                    /* if (pastcells.contains(cells[currentGridIndex])) {
+                        int goodNumCells = newNumCells;
+                        for (int i = 0; i < gridSize; i++) {
+                            for (int j = 0; j < gridSize; j++) {
+                                cells[0][i][j] = false;
+                                cells[1][i][j] = false;
+                            }
+                        }
+                        while (goodNumCells != 0) {
+                            int x1 = rand.nextInt(gridSize);
+                            int y1 = rand.nextInt(gridSize);
+                            
+                            if (!cells[0][x1][y1]) {
+                                goodNumCells--;
+                                gridCells[x1][y1].setFill(Color.BLACK);
+                                cells[0][x1][y1] = true;
+                                cells[1][x1][y1] = true;
+                            }
+                        }
+                        pastcells = new HashSet<boolean[][]>();
+                        System.out.println("x");
+                    }
+                    else {
+                        final boolean[][] cellState = new boolean[gridSize][gridSize];
+                        for (int i = 0; i < gridSize; i++) {
+                            for (int j = 0; j < gridSize; j++) {
+                                cellState[i][j] = cells[currentGridIndex][i][j];
+                            }
+                        }
+                        pastcells.add(cellState);
+                    } */
+
                 }
             }
             currentGridIndex = newGridIndex;
             newGridIndex = (newGridIndex - 1) * (newGridIndex - 1);
         });
+
+
 
 
         
